@@ -1,0 +1,18 @@
+# Visual Studio Code directory
+.vscode/
+
+# Visual Studio Code workspace settings files
+.vscode/*.code-workspace
+
+# Visual Studio Code user-specific settings
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+
+# Visual Studio Code language-specific settings
+.vscode/extensions.json
+
+# Python-specific
+.vscode/
+*.pyc
+__pycache__/
