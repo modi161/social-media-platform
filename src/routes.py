@@ -1,6 +1,6 @@
-from flask import Flask,render_template , redirect ,request # type: ignore
+from flask import render_template , redirect ,request # type: ignore
 
-app = Flask(__name__)
+from src import app
 
 @app.route('/')
 def start_page():
