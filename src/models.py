@@ -1,11 +1,103 @@
 # models.py
-
+# importing the db instanse
 from . import db
 
-class Users(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+from typing import Optional
+from sqlalchemy import Integer , String , Boolean , Date , ForeignKey ,Text
+from sqlalchemy.orm import Mapped , mapped_column
+#from src import db
+from datetime import datetime,timezone
+
+
+class  Family(db.Model):
+    __tablename__ ="family"
+    
+    id : Mapped[int] = mapped_column(primary_key=True)
+    
+    familyname : Mapped[str] = mapped_column(String(80) , unique=True ,nullable=False)
+    
+    bio : Mapped[Optional[str]] = mapped_column(Text)
+    
+    creationdate : Mapped[datetime] = mapped_column(index=True , default=lambda: datetime.now(timezone.utc)) 
+    
+    
+
+
+
+class User(db.Model):
+    __tablename__ = "user"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    
+    username: Mapped[str] = mapped_column(String(60) , index=True , unique=True , nullable=False)
+    
+    FirstName: Mapped[str] = mapped_column(String(80) , nullable=False)
+    
+    email: Mapped[str] = mapped_column(String(150), unique=True , index=True ,nullable=False)
+    
+    password_hash: Mapped[Optional[str]] = mapped_column(String(256))
+    
+    lastname: Mapped[str] = mapped_column(String(80) , nullable=False )
+    
+    
+    #1=male 0=female
+    Gender : Mapped[bool] = mapped_column(Boolean , nullable= False)
+    
+    Birthdate : Mapped[Date] = mapped_column(Date , nullable=False)
+    
+    FamilyID : Mapped[int] = mapped_column(ForeignKey(Family.id), nullable=False ,index=True)
+    
+    # 1 = admin 0 = normal member
+    FamilyRole : Mapped[bool] = mapped_column(Boolean ,nullable=False)
 
     def __repr__(self):
-        return '<Users %r>' % self.username
+        return '<User {}>'.format(self.username)
+    
+    
+class Content(db.Model):
+    __tablename__ = "content"
+    
+    id : Mapped[int] = mapped_column(primary_key=True)
+    
+    description : Mapped[str] = mapped_column(Text)
+    
+    timestamp : Mapped[datetime] = mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
+    
+    # 1 = visibale 0 = not visibale
+    visibility : Mapped[bool] = mapped_column(Boolean , nullable=False)
+    
+    Type : Mapped[bool] = mapped_column(Boolean , nullable=False)
+    
+    userId : Mapped[int] = mapped_column(ForeignKey(User.id) ,index=True ,nullable=False)
+    
+    
+# not complete    
+class ContentPhotos(db.Model):
+    __tablename__ = "contentphotos"
+    
+    contentId : Mapped[int] = mapped_column(ForeignKey(Content.id) , primary_key=True)
+    
+    photoUrl : Mapped[str] = mapped_column(String(250),primary_key=True ,nullable=False)
+    
+        
+class UserLikedContent(db.Model):
+    __tablename__ = "UserLikedContent"
+    
+    UserId : Mapped[int] = mapped_column(ForeignKey(User.id) , primary_key=True)
+    
+    ContentId : Mapped[int] = mapped_column(ForeignKey(Content.id) , primary_key=True)
+    
+class FamilyFollowing(db.Model):
+    __tablename__ = "FamilyFollowing"
+    
+    FollowingFamilyId : Mapped[int] = mapped_column(ForeignKey(Family.id) , primary_key=True)
+    
+    FollowedFamilyId : Mapped[int] = mapped_column(ForeignKey(Family.id) , primary_key=True)
+    
+    
+class FamilyPendingRequests(db.Model):
+    __tablename__ = "FamilyPendingRequests"
+    
+    UserId : Mapped[int] = mapped_column(ForeignKey(User.id) ,primary_key=True)
+    
+    FamilyId : Mapped[int] = mapped_column(nullable=False)
