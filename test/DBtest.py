@@ -1,15 +1,15 @@
 import pymysql
 
 my_db = pymysql.connect(
-    host="localhost",
-    user="root",
-    password="Tarek-1488@ZC"
+    host="reunion.mysql.database.azure.com",
+    user="trmb",
+    password="$$BASMOTESH123",
+    database = 'reunion'    
 ) 
 
 my_cursor = my_db.cursor()
 
-my_cursor.execute("CREATE DATABASE SMP")
-my_cursor.execute("SHOW DATABASES")
+my_cursor.execute("SHOW TABLES")
 for db in my_cursor:
     print(db)
 
