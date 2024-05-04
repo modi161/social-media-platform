@@ -8,9 +8,9 @@ To install the project:
      pip install flask
 4. Install Packages:
     pip install -r r.txt
-5. Specify the Flask App
+5. Specify the Flask App:
    export FLASK_APP=microblog.py
-6. Run the app!
+6. Run the app!:
    flask run
 
    
