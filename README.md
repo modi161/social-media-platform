@@ -1,6 +1,6 @@
 ﻿# social-media-platform
 To install the project:
-1. Create a virtual environment
+1. Create a virtual environment:
      python3 -m venv venv
 2. Activate the virtual environment:
      venv/Scripts/Activate
