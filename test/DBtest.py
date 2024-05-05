@@ -3,6 +3,7 @@ import pymysql
 my_db = pymysql.connect(
     host="reunion.mysql.database.azure.com",
     user="trmb",
+    port =3306,
     password="$$BASMOTESH123",
     database = 'reunion'    
 ) 
