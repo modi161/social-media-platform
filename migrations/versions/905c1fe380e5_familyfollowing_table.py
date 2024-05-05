@@ -1,17 +1,17 @@
-"""Family Following Table
+"""FamilyFollowing Table
 
-Revision ID: 14105c7cda18
-Revises: 7fcb2ec6bbd4
-Create Date: 2024-04-27 12:35:36.327653
+Revision ID: 905c1fe380e5
+Revises: bec6c72ef03a
+Create Date: 2024-04-28 14:42:03.954841
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '14105c7cda18'
-down_revision = '7fcb2ec6bbd4'
+revision = '905c1fe380e5'
+down_revision = 'bec6c72ef03a'
 branch_labels = None
 depends_on = None
 

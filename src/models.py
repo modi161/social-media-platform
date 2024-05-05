@@ -18,10 +18,7 @@ class  Family(db.Model):
     
     bio : Mapped[Optional[str]] = mapped_column(Text)
     
-    creationdate : Mapped[datetime] = mapped_column(index=True , default=lambda: datetime.now(timezone.utc)) 
-    
-    
-
+    creationdate : Mapped[datetime] = mapped_column(index=True , default=lambda: datetime.now(timezone.utc))
 
 
 class User(db.Model):
@@ -54,6 +51,8 @@ class User(db.Model):
         return '<User {}>'.format(self.username)
     
     
+    
+    
 class Content(db.Model):
     __tablename__ = "content"
     
@@ -71,15 +70,19 @@ class Content(db.Model):
     userId : Mapped[int] = mapped_column(ForeignKey(User.id) ,index=True ,nullable=False)
     
     
-# not complete    
+    
+
 class ContentPhotos(db.Model):
     __tablename__ = "contentphotos"
     
     contentId : Mapped[int] = mapped_column(ForeignKey(Content.id) , primary_key=True)
     
     photoUrl : Mapped[str] = mapped_column(String(250),primary_key=True ,nullable=False)
-    
-        
+
+
+
+
+
 class UserLikedContent(db.Model):
     __tablename__ = "UserLikedContent"
     
@@ -87,6 +90,9 @@ class UserLikedContent(db.Model):
     
     ContentId : Mapped[int] = mapped_column(ForeignKey(Content.id) , primary_key=True)
     
+    
+    
+
 class FamilyFollowing(db.Model):
     __tablename__ = "FamilyFollowing"
     
@@ -95,6 +101,8 @@ class FamilyFollowing(db.Model):
     FollowedFamilyId : Mapped[int] = mapped_column(ForeignKey(Family.id) , primary_key=True)
     
     
+    
+
 class FamilyPendingRequests(db.Model):
     __tablename__ = "FamilyPendingRequests"
     

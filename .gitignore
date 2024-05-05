@@ -16,3 +16,7 @@
 .vscode/
 *.pyc
 __pycache__/
+
+
+#Vritual Enviornment
+venv/
