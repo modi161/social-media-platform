@@ -42,4 +42,6 @@ def feedPage(username):
 
 
 
-
+@app.route('/familypage/<familyId>')
+def family_page(familyId):
+    return render_template('family_page.html')
