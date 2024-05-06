@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Feed</title>
+    <link rel="stylesheet" href="homefeed.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h2 class="log">Reunion</h2>
+            <div class="search-bar">
+                <span class="lucide--search"></span>
+                <input type="search" placeholder="Search for Families or Friends">
+            </div>
+            <div class="create">
+                <label for="create-post" class="btn btn-primary">Create</label>
+                <div class="profile-photo">
+                    <img src="./images/profile1.png">
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="left">
+                <a class="profile">
+                    <div class="profile-photo">
+                        <img src="./images/profile1.png">
+                    </div>
+                    <div class="handle">
+                        <h4>Ahmed Bassam</h4>
+                        <p class="text-muted">
+                            @beso
+                        </p>
+                    </div>
+                </a>
+
+            <!--- side bar --->
+                <div class="sidebar">
+                    <a class="active menu-item">
+                        <span><span class="ant-design--home-outlined"></span></span> <h3>Home</h3>
+                    </a>
+                    <a class="menu-item">
+                        <span><span class="iconoir--profile-circle"></span></span> <h3>Profile</h3>
+                    </a>
+                    <a class="menu-item">
+                        <span><span class="ph--compass"></span></span> <h3>Explore</h3>
+                    </a>
+                    <a class="menu-item" id="notifications">
+                        <span><span class="ph--bell"></span><small class="notification-count">10</small></span> <h3>Notifications</h3>
+                        <!--notification popup window-->
+                        <div class="notification-popup">
+                            <div>
+                            <div class="profile-photo">
+                                <img src="./images/profile2.png">
+                            </div>
+                            <div class="notification-body">
+                                <b>Tarek Shalaby</b> begs you to be friends
+                                <small class="text-muted">2 DAYS AGO</small>
+                            </div>
+                            </div>
+                            <div>
+                            <div class="profile-photo">
+                                <img src="./images/profile3.png">
+                            </div>
+                            <div class="notification-body">
+                                <b>Abdelrahman Rashad</b> begs you to be friends
+                                <small class="text-muted">2 DAYS AGO</small>
+                            </div>
+                            </div>
+                            <div>
+                            <div class="profile-photo">
+                                <img src="./images/profile4.png">
+                            </div>
+                            <div class="notification-body">
+                                <b>Mohammed Elsayed</b> begs you to be friends
+                                <small class="text-muted">2 DAYS AGO</small>
+                            </div>
+                            </div>
+                            <!-- end of notification popup window-->
+                        </div>
+                    </a>
+                    <a class=" menu-item" id="messages-notifications">
+                        <span><span class="mynaui--envelope"></span><small class="notification-count">6</small></span> <h3>Messages</h3>
+                    </a>
+                    <a class="menu-item">
+                        <span><span class="solar--settings-linear"></span></span> <h3>Settings</h3>
+                    </a>
+                </div>
+                <label for="create-post" class="btn btn-primary">Create Post</label>
+                <!--end of sidebar-->
+            </div>
+            <!--start of middle-->
+            <div class="middle">
+                <form class="create-post">
+                    <div class="profile-photo">
+                        <img src="./images/profile1.png">
+                    </div>
+                    <input type="text" placeholder="What is on your mind,Ahmed?" id="create-post">
+                    <input type="submit" value="Post" class="btn btn-primary">
+                </form>
+
+                <!-- Feed -->
+                <div class="feeds">
+                    <!-- feed 1  -->
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="profile-photo">
+                                    <img src="./images/profile2.png">
+                                </div>
+                                <div class="info">
+                                    <h3>Tarek Shalaby</h3>
+                                    <small>15 MINUTES AGO</small>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="photo">
+                                <img src="./images/profile2.png">
+                            </div>
+                            <div class="action-button">
+                                <div class="interaction-buttons">
+                                    <span class="ph--heart"></span>
+                                    <span class="iconamoon--comment-bold"></span>
+                                </div>
+                            </div>
+                            <div class="liked-by">
+                                <span><img src="./images/profile1.png"></span>
+                                <span><img src="./images/profile2.png"></span>
+                                <span><img src="./images/profile3.png"></span>
+                                <span><img src="./images/profile4.png"></span>
+                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
+                            </div>
+                            <div class="caption">
+                                <p><b>Tarek Shalaby</b> Being so tired after being punshed as always <span class="harsh-tag">#Tarek_is_weak</span></p>
+                            </div>
+                            <div class="text-muted comments">View all 200 comments</div>
+                        
+                    </div>
+                    <!-- feed 1 end  -->
+                    <!-- feed 2  -->
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="profile-photo">
+                                    <img src="./images/profile3.png">
+                                </div>
+                                <div class="info">
+                                    <h3>Mohammed Elsayed</h3>
+                                    <small>2 HOURS AGO</small>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="photo">
+                                <img src="./images/post.jpeg">
+                            </div>
+                            <div class="action-button">
+                                <div class="interaction-buttons">
+                                    <span class="ph--heart"></span>
+                                    <span class="iconamoon--comment-bold"></span>
+                                </div>
+                            </div>
+                            <div class="liked-by">
+                                <span><img src="./images/profile1.png"></span>
+                                <span><img src="./images/profile2.png"></span>
+                                <span><img src="./images/profile3.png"></span>
+                                <span><img src="./images/profile4.png"></span>
+                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
+                            </div>
+                            <div class="caption">
+                                <p><b>Moammed Elsayed</b> I did this!<span class="harsh-tag">#Master_Chef</span></p>
+                            </div>
+                            <div class="text-muted comments">View all 200 comments</div>
+                        
+                    </div>
+                    <!-- feed 2 end  -->
+                    <!-- feed 3  -->
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="profile-photo">
+                                    <img src="./images/profile4.png">
+                                </div>
+                                <div class="info">
+                                    <h3>Abdelrahman Rashad</h3>
+                                    <small>15 MINUTES AGO</small>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="photo">
+                                <img src="./images/post3.png">
+                            </div>
+                            <div class="action-button">
+                                <div class="interaction-buttons">
+                                    <span class="ph--heart"></span>
+                                    <span class="iconamoon--comment-bold"></span>
+                                </div>
+                            </div>
+                            <div class="liked-by">
+                                <span><img src="./images/profile1.png"></span>
+                                <span><img src="./images/profile2.png"></span>
+                                <span><img src="./images/profile3.png"></span>
+                                <span><img src="./images/profile4.png"></span>
+                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
+                            </div>
+                            <div class="caption">
+                                <p><b>Abdelrahman Rashad</b> I want to get the hell out of this university <span class="harsh-tag">#let_me_out</span></p>
+                            </div>
+                            <div class="text-muted comments">View all 200 comments</div>
+                        
+                    </div>
+                    <!-- feed 3 end  -->
+                    <!-- feed 4  -->
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="profile-photo">
+                                    <img src="./images/profile1.png">
+                                </div>
+                                <div class="info">
+                                    <h3>Ahmed Bassam</h3>
+                                    <small>1 DAY AGO</small>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="photo">
+                                <img src="./images/post2.png">
+                            </div>
+                            <div class="action-button">
+                                <div class="interaction-buttons">
+                                    <span class="ph--heart"></span>
+                                    <span class="iconamoon--comment-bold"></span>
+                                </div>
+                            </div>
+                            <div class="liked-by">
+                                <span><img src="./images/profile1.png"></span>
+                                <span><img src="./images/profile2.png"></span>
+                                <span><img src="./images/profile3.png"></span>
+                                <span><img src="./images/profile4.png"></span>
+                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
+                            </div>
+                            <div class="caption">
+                                <p><b>Ahmed Bassam</b> Anyone good in photoshop erase Tarek from the photo?<span class="harsh-tag">#photoshop</span></p>
+                            </div>
+                            <div class="text-muted comments">View all 200 comments</div>
+                    </div>
+                    <!-- feed 4 end  -->
+                </div>
+                <!-- end Feed -->
+            <!--end of middle-->
+            </div>
+            <!-- RIGHT  -->
+            <div class="right">
+                <div class="messages">
+                    <div class="heading">
+                        <h4>Messages</h4><span class="lucide--edit"></span>
+                    </div>
+                    <div class="search-bar">
+                        <span class="lucide--search"></span>
+                        <input type="search" placeholder="Search messages" id="message-search">
+                    </div>
+                    <div class="category">
+                        <h6 class="active">
+                            Primary
+                        </h6>
+                        <h6>
+                            General
+                        </h6>
+                        <h6 class="message-requests">
+                            Requests(7)
+                        </h6>
+                    </div>
+                    <div class="message">
+                        <div class="profile-photo">
+                            <img src="./images/profile2.png">
+                            <div class="active"></div>
+                        </div>
+                        <div class="message-body">
+                            <h5>Tarek Shalaby</h5>
+                            <p class="text-bold">ana 3awz atmaran</p>
+                        </div>
+                    </div>
+                    <div class="message">
+                        <div class="profile-photo">
+                            <img src="./images/profile3.png">
+                            <div class="active"></div>
+                        </div>
+                        <div class="message-body">
+                            <h5>Mohammed Elsayed</h5>
+                            <p class="text-bold">ana 3awz a4ta8al fel project</p>
+                        </div>
+                    </div>
+                    <div class="message">
+                        <div class="profile-photo">
+                            <img src="./images/profile4.png">
+                            <div class="active"></div>
+                        </div>
+                        <div class="message-body">
+                            <h5>Amar Sherif</h5>
+                            <p class="text-bold">ana 3awz anam</p>
+                        </div>
+                    </div>
+                    <div class="message">
+                        <div class="profile-photo">
+                            <img src="./images/profile5.png">
+                            <div class="active"></div>
+                        </div>
+                        <div class="message-body">
+                            <h5>Amar Sherif</h5>
+                            <p class="text-bold">ana 3awz atgawez</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="friend-requests">
+                    <h4>Requests</h4>
+                    <div class="request">
+                        <div class="info">
+                            <div class="profile-photo">
+                                <img src="./images/profile3.png">
+                            </div>
+                            <div>
+                                <h5>Mohammed Elsayed</h5>
+                                <p class="text-muted">24 mutual friends</p>
+                            </div>
+                        </div>
+                        <div class="action">
+                            <button class="btn btn-primary">
+                                Accept
+                            </button>
+                            <button class="btn">
+                                Decline
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="request">
+                        <div class="info">
+                            <div class="profile-photo">
+                                <img src="./images/post2.png">
+                            </div>
+                            <div>
+                                <h5>Ultimate Team</h5>
+                                <p class="text-muted">3 mutual Families</p>
+                            </div>
+                        </div>
+                        <div class="action">
+                            <button class="btn btn-primary">
+                                Connect
+                            </button>
+                            <button class="btn">
+                                Decline
+                            </button>
+                        </div>
+                    </div>
+                    <div class="request">
+                        <div class="info">
+                            <div class="profile-photo">
+                                <img src="./images/profile5.png">
+                            </div>
+                            <div>
+                                <h5>Amar Sherif</h5>
+                                <p class="text-muted">50 mutual friends</p>
+                            </div>
+                        </div>
+                        <div class="action">
+                            <button class="btn btn-primary">
+                                Accept
+                            </button>
+                            <button class="btn">
+                                Decline
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <!-- end of right  -->
+            </div>
+        </div>
+    </main>
+    <script src="./homefeed.js"></script>
+</body>
+</html>
