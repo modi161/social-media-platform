@@ -2,10 +2,11 @@ import pymysql
 
 my_db = pymysql.connect(
     host="reunion.mysql.database.azure.com",
+    port=3306,
     user="trmb",
     port =3306,
     password="$$BASMOTESH123",
-    database = 'reunion'    
+    database ='reunion'
 ) 
 
 my_cursor = my_db.cursor()
