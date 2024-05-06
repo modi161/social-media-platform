@@ -33,16 +33,19 @@ body{
 .container .section{
     display: flex;
     flex-direction: column;
-    
+    justify-content: left;
     flex-grow: 1;
     padding: 20px;
 }
 .container .section .userinfo{
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 20px;
     padding-top: 20px;
+    background: var;
+    background-color: var(--color-white);
+    padding: 78px;
+    border-radius: 25px;
     
 }
 
@@ -69,14 +72,26 @@ body{
 
 .row2{
     display: flex;
-    flex-direction: row;
-    gap: 45px;
+    flex-direction: column;
+    gap: 10px;
 
+}
+.row2 .inf{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
 }
 
 .row3{
     display: flex;
     flex-direction: column;
+}
+.row3 .inf{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 72px;
 }
 
 .profile-image {
