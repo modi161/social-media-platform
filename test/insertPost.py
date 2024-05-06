@@ -1,5 +1,5 @@
 import pymysql
-from datetime import date
+from datetime import datetime
 
 # Establishing a connection to the database
 try:
@@ -16,27 +16,28 @@ except Exception as e:
 my_cursor = my_db.cursor()
 
 # Defining the SQL INSERT statement for the 'user' table
-sql = "INSERT INTO user (username, FirstName, email, password_hash, lastname, Gender, Birthdate, FamilyID, FamilyRole) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-
+sql = "INSERT INTO Content (description, timestamp, visibility, Type, userId) VALUES (%s, %s, %s, %s, %s)"
+sql2 = "INSERT INTO ContentPhotos (contentId, photoUrl) VALUES (%s, %s)"
 
 # Example data to insert
 # Note: Modify the values accordingly. Ensure dates and other types are correctly formatted.
 data = (
-    "mohamed",          # username
-    "boody",             # FirstName
-    "mohamed.rashad@teeztarek.com",  # email
-    "1234",    # password_hash
-    "tezzztarek",              # lastname
-    True,               # Gender (True for male, False for female)
-    date(2003, 8, 10),   # Birthdate
-    5,                  # FamilyID (assumes a valid ID from the 'family' table)
-    True                # FamilyRole (True for admin, False for normal member)
+    "ba7eb mohameddddddd",   
+    datetime.now(),          
+    1,  
+    1,  
+    4,  
+)
+
+data2 = (
+    2,
+    "https://www.newarab.com/sites/default/files/2023-08/GettyImages-1258930731.jpg"
 )
 
 try:
     # Executing the SQL statement
     my_cursor.execute(sql, data)
-
+    #my_cursor.execute(sql2, data2)
     # Committing the changes
     my_db.commit()
 
