@@ -20,22 +20,21 @@ def user(username):
 # show the posts
 def feedPage(username):
     user = db.first_or_404(sa.select(User).where(User.username == username))
-    user_id = 1
-    family_id = 1
-    #query(User, Post, Comment).join(Post, User.id == Post.user_id).join(Comment, Comment.post_id == Post.id)
+    family_id = user.FamilyID
+    
+    families = Family.query.filter(Family.id != family_id).all()
+
+
     TableOfContent = db.session.query(Family, FamilyFollowing, User, Content, ContentPhotos).\
         join(FamilyFollowing, Family.id == FamilyFollowing.FollowingFamilyId).\
         join(User, User.FamilyID == FamilyFollowing.FollowedFamilyId).\
         join(Content, User.id == Content.userId).\
         join(ContentPhotos, Content.id == ContentPhotos.contentId).all()
     
-    DispContent = Content.query.filter(Content.userId == user_id).first()
-    ContentPhoto = ContentPhotos.query.filter(ContentPhotos.contentId == DispContent.id).all()
-    print(TableOfContent[0])
     posts = [row for row in TableOfContent if row[0].id == family_id]
-    print(posts)
+    print(families)
 
-    return render_template('homefeed.html', Posts=posts)
+    return render_template('homefeed.html', User = user, Posts=posts, Families = families)
     #User=user, Disp=DispContent, 
 
 #post it to the backend

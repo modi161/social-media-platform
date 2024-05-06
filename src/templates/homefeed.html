@@ -34,9 +34,9 @@
                         <img src="{{url_for('static', filename='./images/profile1.png')}}">
                     </div>
                     <div class="handle">
-                        <h4>Ahmed Bassam</h4>
+                        <h4> {{User.FirstName}} {{User.lastname}}</h4>
                         <p class="text-muted">
-                            @beso
+                            @ {{User.username}}
                         </p>
                     </div>
                 </a>
@@ -102,7 +102,7 @@
                     <div class="profile-photo">
                         <img src="{{url_for('static', filename='./images/profile1.png')}}">
                     </div>
-                    <input type="text" placeholder="What is on your mind,Ahmed?" id="create-post">
+                    <input type="text" placeholder="What is on your mind, {{ User.FirstName }}?" id="create-post">
                     <input type="submit" value="Post" class="btn btn-primary">
                 </form>
 
@@ -110,6 +110,7 @@
                 <div class="feeds">
                     <!-- feed 1  -->
                     {% for post in Posts %}
+                    {% if post[3].visibility == 1 %}
                     <div class="feed">
                         <div class="head">
                             <div class="user">
@@ -144,6 +145,7 @@
                             <div class="text-muted comments">View all 200 comments</div>
                         
                     </div>
+                    {% endif %}
                     {% endfor %}
                     <!-- feed 1 end  -->
                 </div>
@@ -183,26 +185,28 @@
                     </div>
                 </div>
                 <div class="friend-requests">
-                    <h4>Requests</h4>
+                    <h4>Follow Families</h4>
+                    {% for family in Families %}
                     <div class="request">
                         <div class="info">
                             <div class="profile-photo">
                                 <img src="{{url_for('static', filename='./images/profile3.png')}}">
                             </div>
                             <div>
-                                <h5>Mohammed Elsayed</h5>
+                                <h5>{{ family.familyname }}</h5>
                                 <p class="text-muted">24 mutual friends</p>
                             </div>
                         </div>
                         <div class="action">
                             <button class="btn btn-primary">
-                                Accept
+                                Follow
                             </button>
                             <button class="btn">
-                                Decline
+                                Remove
                             </button>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             <!-- end of rieght  -->
             </div>

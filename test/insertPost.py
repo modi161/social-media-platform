@@ -22,22 +22,22 @@ sql2 = "INSERT INTO ContentPhotos (contentId, photoUrl) VALUES (%s, %s)"
 # Example data to insert
 # Note: Modify the values accordingly. Ensure dates and other types are correctly formatted.
 data = (
-    "ba7eb mohameddddddd",   
+    "ba7eb Rashad",   
     datetime.now(),          
     1,  
     1,  
-    4,  
+    6,  
 )
 
 data2 = (
-    2,
-    "https://www.newarab.com/sites/default/files/2023-08/GettyImages-1258930731.jpg"
+    5,
+    "https://prod-media.beinsports.com/image/1706000402182_8554071a-cf34-4e7c-baeb-f0f8555cb5f8.jpg?ver=06-02-2024"
 )
 
 try:
     # Executing the SQL statement
-    my_cursor.execute(sql, data)
-    #my_cursor.execute(sql2, data2)
+    #my_cursor.execute(sql, data)
+    my_cursor.execute(sql2, data2)
     # Committing the changes
     my_db.commit()
 
