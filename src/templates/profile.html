@@ -1,14 +1,58 @@
+<!DOCTYPE html>
 {% extends 'base.html' %}
 
 {% block head %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='profile.css' ) }}">
-    {# <link rel="stylesheet" href="style.css"> #}
-    <title>Modern Login Page | AsmrProg</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>profile page</title>
 {% endblock %}
     
 
 {% block body %}
-    <h1>{{ user.email }}</h1>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <h1>Reunion</h1>                
+            </div>
+            <div class="navigations">
+                <ul>
+                    <li class="menu-item"><a><span class="icon"><i class="fa-solid fa-house"></i></span> <span>Home</span> </a></li>
+                    <li class="menu-item"><a><span class="icon"><i class="fa-solid fa-bell"></i></span> <span>Notifications</span> </a></li>
+                    <li class="menu-item"><a><span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span> <span>Search</span> </a></li>
+                    <li class="menu-item"><a><span class="icon"><i class="fa-regular fa-circle"></i></span> <span>Profile</span> </a></li>
+                    <li class="menu-item"><a><span class="icon"><i class="fa-regular fa-compass"></i></span> <span>Explore</span> </a></li>
+                    <li class="menu-item"><a><span class="icon"><i class="fa-regular fa-compass"></i></span> <span>My Family</span> </a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="userinfo">
+                <div class="profile-image">
+                    <img src="https://www.newarab.com/sites/default/files/2023-08/GettyImages-1258930731.jpg">
+                </div>
+                <div class="data">
+                    <div class="row1">
+                        <h3>{{user.username}}</h3>
+                        <button>Edit profile</button>
+                        <button>Add Post</button>
+                    </div>
+                    <div class="row2">
+                        <div class="inf"><h3>First name</h3> <p>{{user.FirstName}}</p></div>
+                        <div class="inf"><h3>Last name</h3> <p>{{user.lastname}}</p></div>
+                        <div class="inf"><h3>birthdate</h3> <p>{{user.Birthdate}}</p></div>
+                    </div>
+                    <div class="row3">
+                        <h3>Family : {{user_family.familyname}}</h3>
+                        <p>{{user.bio}}</p>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="posts">
+
+            </div>
+        </div>
+    </div>
 {% endblock %}

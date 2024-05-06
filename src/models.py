@@ -19,6 +19,8 @@ class  Family(db.Model):
     bio : Mapped[Optional[str]] = mapped_column(Text)
     
     creationdate : Mapped[datetime] = mapped_column(index=True , default=lambda: datetime.now(timezone.utc))
+    
+    coverphoto : Mapped[str] = mapped_column(String(250))
 
 
 class User(db.Model):
@@ -43,10 +45,13 @@ class User(db.Model):
     Birthdate : Mapped[Date] = mapped_column(Date , nullable=False)
     
     FamilyID : Mapped[int] = mapped_column(ForeignKey(Family.id), nullable=False ,index=True)
+
     
     # 1 = admin 0 = normal member
     FamilyRole : Mapped[bool] = mapped_column(Boolean ,nullable=False)
-
+    
+    bio : Mapped[Optional[str]] = mapped_column(Text)
+    photo : Mapped[str] = mapped_column(String(250))
     def __repr__(self):
         return '<User {}>'.format(self.username)
     
