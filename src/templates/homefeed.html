@@ -197,14 +197,12 @@
                                 <p class="text-muted">24 mutual friends</p>
                             </div>
                         </div>
-                        <div class="action">
-                            <button class="btn btn-primary">
+                        <form class="action" action="/feedpage/{{ User.username }}" method="post">
+                            <input type="hidden" name="additional_data" value="{{ family.id }}">
+                            <button type="submit" class="btn btn-primary"> 
                                 Follow
                             </button>
-                            <button class="btn">
-                                Remove
-                            </button>
-                        </div>
+                        </form>
                     </div>
                     {% endfor %}
                 </div>
