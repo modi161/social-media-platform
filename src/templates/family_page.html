@@ -30,20 +30,19 @@
         <div class ="photo-section">
             <div class ="family_photo">
                 <div class ="family_cover_img">
-                    <img src ="https://www.unitelegalservices.org/media/1057/family_members.jpg">    
+                    <img src = "{{user_family.coverphoto}}" alt="Add image">    
                 </div> 
 
                 <div class="profile_img"> 
-                    <img src ="https://www.shutterstock.com/image-photo/father-girl-selfie-portrait-peace-260nw-2348830813.jpg">
+                    <img src ="{{user_family.profilephoto}}" alt="Add image">
                 </div>   
              
         </div>
 
         <div class ="family_name"> 
-            <h3>Elsenwar Family</h3>
-            <p class="family_bio">The best family in the world. We have fun by eating watermelon.</p>
-            
-
+            <h3>{{user_family.familyname}}</h3>
+            <p class="family_bio">{{user_family.bio}}</p>
+            <p>{{user_family.creationdate}}</p>
         </div>
 
 
@@ -54,83 +53,43 @@
                     <div class="heading">
                         <h4>Family Members</h4>
                     </div>
+                    {% for member in family_members %}
                     <div class="message">
                         <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
+                            <img src="{{member.photo}}" alt="error">
                             <div class="active"></div>
                         </div>
                         <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
+                            <h5>{{member.username}}</h5>
+                            <p class="text-bold">{{member.bio}}</p>
                         </div>
                     </div>
-
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
-                        </div>
-                    </div>
-
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
-                        </div>
-                    </div>
-
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
-                        </div>
-                    </div>
-
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
 
             </div>
             <!--start of middle-->
             <div class="middle">
-
                 <!-- Feed -->
                 <div class="feeds">
-                    <!-- feed 1  -->
+                    {% for post in posts %}
+                        {% set member = post[0] %}
+                        {% set content = post[1] %}
+                        {% set photo = post[2] %}
                     <div class="feed">
                         <div class="head">
                             <div class="user">
                                 <div class="profile-photo">
-                                    <img src="{{url_for('static', filename='./images/profile2.png')}}">
+                                    <img src="{{user_family.profilephoto}}">
                                 </div>
                                 <div class="info">
-                                    <h3>Family Name</h3>
-                                    <small>time stamp</small>
+                                    <h3>{{user_family.familyname}}</h3>
+                                    <small>{{content.timestamp}}</small>
                                 </div>
                             </div>
                         </div>
                             <div class="photo">
-                                <img src="https://www.parents.com/thmb/HoBACbXVxkm6nhnb4sbtrkz6EPs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1447338583-d091945837dc4bc8aa2f5f73d99f63e0.jpg">
+                                <img src="{{photo.photoUrl}}" alt="error">
                             </div>
                             <div class="action-button">
                                 <div class="interaction-buttons">
@@ -146,88 +105,12 @@
                                 <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
                             </div>
                             <div class="caption">
-                                <p><b>username</b> description</p>
+                                <p><b>{{member.username}}</b> {{content.description}}</p>
                             </div>
-                            <div class="text-muted comments">View all 200 comments</div>
-                        
+                            <div class="text-muted comments">View all 200 comments</div> 
                     </div>
                     <!-- feed 1 end  -->
-
-
-                    <!-- feed 2  -->
-                    <div class="feed">
-                        <div class="head">
-                            <div class="user">
-                                <div class="profile-photo">
-                                    <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                                </div>
-                                <div class="info">
-                                    <h3>Family Name</h3>
-                                    <small>time stamp</small>
-                                </div>
-                            </div>
-                        </div>
-                            <div class="photo">
-                                <img src="https://www.parents.com/thmb/HoBACbXVxkm6nhnb4sbtrkz6EPs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1447338583-d091945837dc4bc8aa2f5f73d99f63e0.jpg">
-                            </div>
-                            <div class="action-button">
-                                <div class="interaction-buttons">
-                                    <span class="ph--heart"></span>
-                                    <span class="iconamoon--comment-bold"></span>
-                                </div>
-                            </div>
-                            <div class="liked-by">
-                                <span><img src="{{url_for('static', filename='./images/profile1.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile2.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile3.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile4.png')}}"></span>
-                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
-                            </div>
-                            <div class="caption">
-                                <p><b>username</b> description</p>
-                            </div>
-                            <div class="text-muted comments">View all 200 comments</div>
-                        
-                    </div>
-                    <!-- feed 2 end  -->
-
-
-                    <!-- feed 3  -->
-                    <div class="feed">
-                        <div class="head">
-                            <div class="user">
-                                <div class="profile-photo">
-                                    <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                                </div>
-                                <div class="info">
-                                    <h3>Family Name</h3>
-                                    <small>time stamp</small>
-                                </div>
-                            </div>
-                        </div>
-                            <div class="photo">
-                                <img src="https://www.parents.com/thmb/HoBACbXVxkm6nhnb4sbtrkz6EPs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1447338583-d091945837dc4bc8aa2f5f73d99f63e0.jpg">
-                            </div>
-                            <div class="action-button">
-                                <div class="interaction-buttons">
-                                    <span class="ph--heart"></span>
-                                    <span class="iconamoon--comment-bold"></span>
-                                </div>
-                            </div>
-                            <div class="liked-by">
-                                <span><img src="{{url_for('static', filename='./images/profile1.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile2.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile3.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile4.png')}}"></span>
-                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
-                            </div>
-                            <div class="caption">
-                                <p><b>username</b> description</p>
-                            </div>
-                            <div class="text-muted comments">View all 200 comments</div>
-                        
-                    </div>
-                    <!-- feed 3 end  -->
+                    {% endfor %}
                 </div>
                 <!-- end Feed -->
             <!--end of middle-->
@@ -238,60 +121,18 @@
                     <div class="heading">
                         <h4>Followings</h4>
                     </div>
+                    {% for followed_fam in followed_families %}
                     <div class="message">
                         <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
+                            <img src="{{followed_fam.profilephoto}}" alt="error">
                             <div class="active"></div>
                         </div>
                         <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
+                            <h5>{{followed_fam.familyname}}</h5>
+                            <p class="text-bold">{{followed_fam.bio}}</p>
                         </div>
                     </div>
-
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
-                        </div>
-                    </div>
-
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
-                        </div>
-                    </div>
-
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
-                        </div>
-                    </div>
-
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">Dlo3et El3ila</p>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             <!-- end of right  -->
             </div>

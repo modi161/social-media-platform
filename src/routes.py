@@ -48,6 +48,29 @@ def feedPage(username):
 
 
 
-@app.route('/familypage/<familyId>')
-def family_page(familyId):
-    return render_template('family_page.html')
+@app.route('/familypage/<username>')
+def family_page(username):
+    user = db.first_or_404(sa.select(User).where(User.username == username)) #will trigger a 404 error if user not found in the db
+    user_family = Family.query.filter_by(id = user.FamilyID).first()
+    
+    posts = db.session.query(User,  Content, ContentPhotos)\
+    .join(Family, User.FamilyID == Family.id)\
+    .join(Content, User.id == Content.userId)\
+    .join(ContentPhotos, ContentPhotos.contentId == Content.id)\
+    .filter(Family.id == user_family.id)\
+    .all()
+    
+    
+    family_members = db.session.query(User).join(Family,User.FamilyID == Family.id)\
+    .filter(Family.id == user_family.id)\
+    .all()
+    
+    family_following = db.session.query(FamilyFollowing.FollowedFamilyId)\
+    .join(Family,Family.id == FamilyFollowing.FollowingFamilyId)\
+    .filter(Family.id == user_family.id)\
+    .all()
+    family_followed_ids = [id[0] for id in family_following]
+    
+    followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()    
+    
+    return render_template('family_page.html' ,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members)

@@ -16,10 +16,10 @@ except:
 my_cursor = my_db.cursor()
 
 # Defining the SQL INSERT statement
-sql = "INSERT INTO family (familyname, bio, creationdate) VALUES (%s, %s, %s)"
+sql = "INSERT INTO family (familyname, bio, creationdate , coverphoto ,profilephoto) VALUES (%s, %s, %s, %s, %s)"
 
 # Example data to insert
-data = ("Smith", "This is the Smith family.", datetime.now(timezone.utc))
+data = ("mexico", "This is the mexico family.", datetime.now(timezone.utc),"https://www.newarab.com/sites/default/files/2023-08/GettyImages-1258930731.jpg","https://www.newarab.com/sites/default/files/2023-08/GettyImages-1258930731.jpg")
 
 try:
     # Executing the SQL statement

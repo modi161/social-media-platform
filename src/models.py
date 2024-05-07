@@ -21,6 +21,8 @@ class  Family(db.Model):
     creationdate : Mapped[datetime] = mapped_column(index=True , default=lambda: datetime.now(timezone.utc))
     
     coverphoto : Mapped[str] = mapped_column(String(250))
+    
+    profilephoto : Mapped[str] = mapped_column(String(250))
 
 
 class User(db.Model):
