@@ -22,12 +22,12 @@ sql = "INSERT INTO user (username, FirstName, email, password_hash, lastname, Ge
 # Example data to insert
 # Note: Modify the values accordingly. Ensure dates and other types are correctly formatted.
 data = (
+    "Alaa",          # username
+    "boody",             # FirstName
+    "Alaa.rashad@teeztarek.com",  # email
+    "1234",    # password_hash
+    "tezzztarek",              # lastname
 
-    "Tarek_shalaby_125",          # username
-    "Tarek",             # FirstName
-    "Tarek_shalaby2015@example.com",  # email
-    "1234567",    # password_hash
-    "Shalaby",              # lastname
     True,               # Gender (True for male, False for female)
     date(2003, 8, 14),   # Birthdate
     6,                  # FamilyID (assumes a valid ID from the 'family' table)

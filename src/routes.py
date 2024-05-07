@@ -22,26 +22,43 @@ def user(username):
     #print(user_family.familyname)
     return render_template('profile.html' , user = user , user_family = user_family)
 
-@app.route('/feedpage/<username>')
+@app.route('/feedpage/<username>', methods=['GET', 'POST'])
 # show the posts
 def feedPage(username):
     user = db.first_or_404(sa.select(User).where(User.username == username))
-    user_id = 1
-    family_id = 1
-    #query(User, Post, Comment).join(Post, User.id == Post.user_id).join(Comment, Comment.post_id == Post.id)
+    family_id = user.FamilyID
+
+    if request.method == 'POST':
+        additional_data = request.form['additional_data']
+        newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
+        db.session.add(newFollowing)
+        db.session.commit()
+    
+    # show families to be followed
+    alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
+    alredy_followed_families = []
+    for family in alredy_followed:
+        alredy_followed_families.append(family.FollowedFamilyId)
+
+    print(alredy_followed_families)
+    
+    print(alredy_followed)
+    families = Family.query.filter(Family.id != family_id).all()
+
     TableOfContent = db.session.query(Family, FamilyFollowing, User, Content, ContentPhotos).\
         join(FamilyFollowing, Family.id == FamilyFollowing.FollowingFamilyId).\
         join(User, User.FamilyID == FamilyFollowing.FollowedFamilyId).\
         join(Content, User.id == Content.userId).\
         join(ContentPhotos, Content.id == ContentPhotos.contentId).all()
     
-    DispContent = Content.query.filter(Content.userId == user_id).first()
-    ContentPhoto = ContentPhotos.query.filter(ContentPhotos.contentId == DispContent.id).all()
-    print(TableOfContent[0])
+    families_filtered = [row for row in families if row.id not in alredy_followed_families]
+    
     posts = [row for row in TableOfContent if row[0].id == family_id]
-    print(posts)
+    
 
-    return render_template('homefeed.html', Posts=posts ,user = user)
+
+    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered)
+
     #User=user, Disp=DispContent, 
 
 #post it to the backend
