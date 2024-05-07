@@ -14,12 +14,24 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <form id="myForm">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name">
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="email">
-            <button type="button" onclick="submitForm()">Submit</button>
+        <form action="" method="post" enctype="multipart/form-data" novalidate>
+            {#generates a hidden field that includes a token that is used to protect the form against CSRF attacks#}
+            {{form.hidden_tag()}}
+            <p>
+                {{ form.cover_photo.label }}<br>
+                {{ form.cover_photo() }}
+            </p>
+            <p>
+                {{ form.profile_photo.label }}<br>
+                {{ form.profile_photo() }}
+            </p>
+            <p>
+                {{ form.bio.label }}<br>
+                {{ form.bio(cols=32, rows=4) }}
+            </p>
+            <p>
+                {{ form.submit() }}
+            </p>
         </form>
     </div>
   </div>
@@ -32,7 +44,7 @@
             </div>
             <div class="create">
                 <label for="create-post" class="btn btn-primary">Create</label>
-                <label for="create-post" class="btn btn-primary"><button class="button" onclick="openModal()">Edit</button></label>
+                <label for="create-post" class="btn btn-primary"><button  class="button-edit" onclick="openModal()">Edit</button></label>
             </div>
         </div>
     </nav>

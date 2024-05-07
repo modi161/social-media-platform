@@ -48,6 +48,11 @@ a:hover{
   color: var(--color-primary);
 }
 
+.button-edit{
+  background-color: var(--color-primary);
+  color: white;
+}
+
 .container{
     width: 80%;
     margin: 0 auto;
@@ -752,21 +757,23 @@ width: 80%;
 max-width: 400px;
 }
 
-/* Styles for the form inputs */
-input[type="text"] {
-width: 100%;
-padding: 10px;
-margin: 5px 0;
-box-sizing: border-box;
+.modal .modal-content form{
+  margin: 20px;
+  padding: 20px;
 }
 
-/* Styles for the buttons */
-.button {
-background-color:var(--color-primary);
-color: white;
-border: none;
-cursor: pointer;
-border-radius: 5px;
+.modal .modal-content textarea{
+  border: 1px solid black;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.modal .modal-content input[type="submit"]{
+  background-color: var(--color-primary);
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 6px;
 }
 
 .modal .modal-content span{
