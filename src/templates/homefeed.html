@@ -46,10 +46,10 @@
                     <a class="active menu-item">
                         <span><span class="ant-design--home-outlined"></span></span> <h3>Home</h3>
                     </a>
-                    <a class="menu-item" href="{{ url_for('user', username=user.username) }}">
+                    <a class="menu-item" href="{{ url_for('user', username=User.username) }}">
                         <span><span class="iconoir--profile-circle"></span></span> <h3>Profile</h3>
                     </a>
-                    <a class="menu-item" href="{{ url_for('family_page', family_id=user.FamilyID) }}">
+                    <a class="menu-item" href="{{ url_for('family_page', family_id=User.FamilyID) }}">
                         <span><span class="iconoir--profile-circle"></span></span> <h3>My Family</h3>
                     </a>
                     <a class="menu-item">
