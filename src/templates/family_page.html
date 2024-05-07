@@ -11,6 +11,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
 </head>
 <body id="blur">
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <form id="myForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email">
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form>
+    </div>
+  </div>
     <nav>
         <div class="container">
             <h2 class="log">Reunion</h2>
@@ -20,7 +32,7 @@
             </div>
             <div class="create">
                 <label for="create-post" class="btn btn-primary">Create</label>
-                <label for="create-post" class="btn btn-primary"><a style="color: white;">Edit</a></label>
+                <label for="create-post" class="btn btn-primary"><button class="button" onclick="openModal()">Edit</button></label>
             </div>
         </div>
     </nav>
@@ -135,10 +147,48 @@
                 </div>
             <!-- end of right  -->
             </div>
-        </div>
-
-            
+        </div>        
     </main>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        
+        // Get the button that opens the modal
+        var btn = document.getElementsByClassName("button")[0];
+        
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        
+        // When the user clicks the button, open the modal
+        function openModal() {
+          modal.style.display = "block";
+        }
+        
+        // When the user clicks on <span> (x), close the modal
+        function closeModal() {
+          modal.style.display = "none";
+        }
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+        
+        // Function to handle form submission
+        function submitForm() {
+          var name = document.getElementById("name").value;
+          var email = document.getElementById("email").value;
+          
+          // You can handle form submission here, for now just log the values
+          console.log("Name: " + name);
+          console.log("Email: " + email);
+          
+          // Close the modal after submission (you can remove this if you want)
+          closeModal();
+        }
+    </script>
 </body>
 
 </html>
