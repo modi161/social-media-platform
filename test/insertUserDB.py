@@ -16,23 +16,24 @@ except Exception as e:
 my_cursor = my_db.cursor()
 
 # Defining the SQL INSERT statement for the 'user' table
-sql = "INSERT INTO user (username, FirstName, email, password_hash, lastname, Gender, Birthdate, FamilyID, FamilyRole ,bio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s)"
+sql = "INSERT INTO user (username, FirstName, email, password_hash, lastname, Gender, Birthdate, FamilyID, FamilyRole ,bio ,photo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 
 # Example data to insert
 # Note: Modify the values accordingly. Ensure dates and other types are correctly formatted.
 data = (
 
-    "john_shalaby_125",          # username
+    "Tarek_shalaby_125",          # username
     "Tarek",             # FirstName
-    "Tarek_shalaby@example.com",  # email
+    "Tarek_shalaby2015@example.com",  # email
     "1234567",    # password_hash
     "Shalaby",              # lastname
     True,               # Gender (True for male, False for female)
     date(2003, 8, 14),   # Birthdate
-    1,                  # FamilyID (assumes a valid ID from the 'family' table)
+    6,                  # FamilyID (assumes a valid ID from the 'family' table)
     False,                # FamilyRole (True for admin, False for normal member)
-    "I Am Tarek Shalaby data science engineer"
+    "I Am Tarek Shalaby data science engineer",
+    "https://www.newarab.com/sites/default/files/2023-08/GettyImages-1258930731.jpg"
 )
 
 try:
