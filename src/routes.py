@@ -41,17 +41,17 @@ def feedPage(username):
     posts = [row for row in TableOfContent if row[0].id == family_id]
     print(posts)
 
-    return render_template('homefeed.html', Posts=posts)
+    return render_template('homefeed.html', Posts=posts ,user = user)
     #User=user, Disp=DispContent, 
 
 #post it to the backend
 
 
 
-@app.route('/familypage/<username>')
-def family_page(username):
-    user = db.first_or_404(sa.select(User).where(User.username == username)) #will trigger a 404 error if user not found in the db
-    user_family = Family.query.filter_by(id = user.FamilyID).first()
+@app.route('/familypage/<int:family_id>')
+def family_page(family_id):
+    
+    user_family = Family.query.filter_by(id = family_id).first()
     
     posts = db.session.query(User,  Content, ContentPhotos)\
     .join(Family, User.FamilyID == Family.id)\
