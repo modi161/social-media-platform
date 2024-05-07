@@ -91,3 +91,27 @@ def family_page(family_id):
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()    
     
     return render_template('family_page.html' ,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members)
+
+@app.route('/familypage/DeletePost/<int:content_id>')
+def family_page_delete_content(content_id):
+    
+    photos = ContentPhotos.query.filter_by(contentId=content_id).all()
+    content = Content.query.get(content_id)
+    user_id = getattr(content, "userId")
+    
+    user = User.query.get(user_id)
+    family_id = getattr(user, "FamilyID")
+    
+    #Delete row from the database, first photos then content
+    for photo in photos:
+        db.session.delete(photo)
+        db.session.commit()
+
+        
+        
+    db.session.delete(content)
+    db.session.commit()
+        
+    return family_page(family_id)
+    
+    
