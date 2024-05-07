@@ -46,8 +46,11 @@
                     <a class="active menu-item">
                         <span><span class="ant-design--home-outlined"></span></span> <h3>Home</h3>
                     </a>
-                    <a class="menu-item">
+                    <a class="menu-item" href="{{ url_for('user', username=user.username) }}">
                         <span><span class="iconoir--profile-circle"></span></span> <h3>Profile</h3>
+                    </a>
+                    <a class="menu-item" href="{{ url_for('family_page', family_id=user.FamilyID) }}">
+                        <span><span class="iconoir--profile-circle"></span></span> <h3>My Family</h3>
                     </a>
                     <a class="menu-item">
                         <span><span class="ph--compass"></span></span> <h3>Explore</h3>

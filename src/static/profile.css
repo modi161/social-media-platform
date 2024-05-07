@@ -1,0 +1,191 @@
+
+:root {
+    --color-white: hsl(252,30%,100%);
+    --color-light: hsl(252,30%,95%);
+    --color-gray:hsl(252,15%,65%);
+    --color-primary:hsl(252,75%,60%);
+    --color-secondary:hsl(252,100%,90%);
+    --color-success:hsl(120,95%,65%);
+    --color-danger:hsl(0,95%,65%);
+    --color-dark:hsl(252,30%,17%);
+    --color-black:hsl(252,30%,10%);
+    
+    --border-radius:2rem;
+    --card-border-raduis:1rem;
+    --btn-padding:0.6rem 1rem;
+    --card-padding:1rem;
+    --search-padding:0.6rem 1rem;
+    
+    --sticky-top-left:5.4rem;
+    --sticky-top-right:-18rem;
+ }
+body{
+    background: var(--color-light);
+    overflow-x: hidden;
+}
+
+
+.container{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.container .section{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    flex-grow: 1;
+    padding: 20px;
+}
+.container .section .userinfo{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
+    background: var;
+    background-color: var(--color-white);
+    padding: 78px;
+    border-radius: 25px;
+    
+}
+
+.userinfo .data{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.userinfo .data .row1{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.row1 button{
+    background: var(--color-primary);
+    padding: 7px 20px;
+    border-radius: 4px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.row2{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+.row2 .inf{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+}
+
+.row3{
+    display: flex;
+    flex-direction: column;
+}
+.row3 .inf{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 72px;
+}
+
+.profile-image {
+    width: 150px; /* Size of the profile picture */
+    height: 150px; /* Ensure the width and height are equal for a circle */
+    border-radius: 50%; /* Makes the image circular */
+    overflow: hidden; /* Ensures nothing extends outside the circle */
+    border: 3px solid #333; /* Optional: adds a border around the image */
+    margin-right: 20px; /* Space between image and info */
+    
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the space without distortion */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.container .sidebar{
+    width: 20%;
+    background-color: var(--color-light);
+    padding: 20px;
+    height: 100vh; /* Full-height viewport */
+    
+}
+
+.sidebar .logo h1{
+    display: flex;
+    justify-content: center;
+}
+
+.container .sidebar .navigations ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-white);
+    border-radius: var(--card-border-raduis);
+}
+
+.container .sidebar .navigations ul li{
+    position: relative; /* needed for absolute positioning of ::before */
+    padding: 30px 20px; /* vertical and horizontal padding */
+    cursor: pointer; /* change cursor to pointer to indicate clickability */
+    transition: background-color 0.3s;
+}
+
+.container .sidebar .navigations ul li a{
+    text-decoration: none; /* remove underline from links */
+    color: black; /* default text color */
+    /* display: block;  */
+    display: flex;
+}
+
+.navigations a .icon{
+    padding-right: 5px;
+}
+
+.navigations li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background-color: transparent; /* initial color transparent */
+    transition: background-color 0.3s; /* smooth transition for background color */
+    
+}
+
+/* Hover effects */
+.navigations li:hover {
+    background-color: #ddd; /* light grey background on hover */
+    
+}
+
+.navigations li:hover a {
+    color: #333; /* darker text color on hover */
+}
+
+.navigations li:hover::before {
+    background-color: var(--color-primary); /* green bar on the left on hover */
+
+}
+
+
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Feed</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='familypage.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h2 class="log">Reunion</h2>
+            <div class="search-bar">
+                <span class="lucide--search"></span>
+                <input type="search" placeholder="Search for Families or Friends">
+            </div>
+            <div class="create">
+                <label for="create-post" class="btn btn-primary">Create</label>
+                <div class="profile-photo">
+                    <img src="./images/profile1.png">
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class ="photo-section">
+            <div class ="family_photo">
+                <div class ="family_cover_img">
+                    <img src = "{{user_family.coverphoto}}" alt="Add image">    
+                </div> 
+
+                <div class="profile_img"> 
+                    <img src ="{{user_family.profilephoto}}" alt="Add image">
+                </div>   
+             
+        </div>
+
+        <div class ="family_name"> 
+            <h3>{{user_family.familyname}}</h3>
+            <p class="family_bio">{{user_family.bio}}</p>
+            <p>{{user_family.creationdate}}</p>
+        </div>
+
+
+        <div class="container">
+            <div class="left">
+
+                <div class="messages">
+                    <div class="heading">
+                        <h4>Family Members</h4>
+                    </div>
+                    {% for member in family_members %}
+                    <div class="message">
+                        <div class="profile-photo">
+                            <img src="{{member.photo}}" alt="error">
+                            <div class="active"></div>
+                        </div>
+                        <div class="message-body">
+                            <h5><a href="{{ url_for('user', username=member.username) }}">{{member.username}}</a></h5>
+                            <p class="text-bold">{{member.bio}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <!--start of middle-->
+            <div class="middle">
+                <!-- Feed -->
+                <div class="feeds">
+                    {% for post in posts %}
+                        {% set member = post[0] %}
+                        {% set content = post[1] %}
+                        {% set photo = post[2] %}
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="profile-photo">
+                                    <img src="{{user_family.profilephoto}}">
+                                </div>
+                                <div class="info">
+                                    <h3>{{user_family.familyname}}</h3>
+                                    <small>{{content.timestamp}}</small>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="photo">
+                                <img src="{{photo.photoUrl}}" alt="error">
+                            </div>
+                            <div class="action-button">
+                                <div class="interaction-buttons">
+                                    <span class="ph--heart"></span>
+                                    <span class="iconamoon--comment-bold"></span>
+                                </div>
+                            </div>
+                            <div class="liked-by">
+                                <span><img src="{{url_for('static', filename='./images/profile1.png')}}"></span>
+                                <span><img src="{{url_for('static', filename='./images/profile2.png')}}"></span>
+                                <span><img src="{{url_for('static', filename='./images/profile3.png')}}"></span>
+                                <span><img src="{{url_for('static', filename='./images/profile4.png')}}"></span>
+                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
+                            </div>
+                            <div class="caption">
+                                <p><b>{{member.username}}</b> {{content.description}}</p>
+                            </div>
+                            <div class="text-muted comments">View all 200 comments</div> 
+                    </div>
+                    <!-- feed 1 end  -->
+                    {% endfor %}
+                </div>
+                <!-- end Feed -->
+            <!--end of middle-->
+            </div>
+            <!-- RIGHT  -->
+            <div class="right">
+                <div class="messages">
+                    <div class="heading">
+                        <h4>Followings</h4>
+                    </div>
+                    {% for followed_fam in followed_families %}
+                    <div class="message">
+                        <div class="profile-photo">
+                            <img src="{{followed_fam.profilephoto}}" alt="error">
+                            <div class="active"></div>
+                        </div>
+                        <div class="message-body">
+                            <h5><a href="{{ url_for('family_page', family_id=followed_fam.id) }}" >{{followed_fam.familyname}}</a></h5>
+                            <p class="text-bold">{{followed_fam.bio}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            <!-- end of right  -->
+            </div>
+        </div>
+
+            
+    </main>
+</body>
+
+</html>

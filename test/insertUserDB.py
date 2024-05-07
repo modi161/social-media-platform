@@ -16,7 +16,7 @@ except Exception as e:
 my_cursor = my_db.cursor()
 
 # Defining the SQL INSERT statement for the 'user' table
-sql = "INSERT INTO user (username, FirstName, email, password_hash, lastname, Gender, Birthdate, FamilyID, FamilyRole) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+sql = "INSERT INTO user (username, FirstName, email, password_hash, lastname, Gender, Birthdate, FamilyID, FamilyRole ,bio ,photo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 
 # Example data to insert
@@ -27,10 +27,13 @@ data = (
     "Alaa.rashad@teeztarek.com",  # email
     "1234",    # password_hash
     "tezzztarek",              # lastname
+
     True,               # Gender (True for male, False for female)
-    date(2003, 8, 10),   # Birthdate
-    5,                  # FamilyID (assumes a valid ID from the 'family' table)
-    True                # FamilyRole (True for admin, False for normal member)
+    date(2003, 8, 14),   # Birthdate
+    6,                  # FamilyID (assumes a valid ID from the 'family' table)
+    False,                # FamilyRole (True for admin, False for normal member)
+    "I Am Tarek Shalaby data science engineer",
+    "https://www.newarab.com/sites/default/files/2023-08/GettyImages-1258930731.jpg"
 )
 
 try:

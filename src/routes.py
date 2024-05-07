@@ -2,8 +2,12 @@ from flask import render_template , redirect ,request , flash
 
 from src import app,db
 import sqlalchemy as sa
+
+
+
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing
+
 
 
 @app.route('/')
@@ -14,7 +18,9 @@ def start_page():
 # login_required should be added here ////////////////////
 def user(username):
     user = db.first_or_404(sa.select(User).where(User.username == username)) #will trigger a 404 error if user not found in the db
-    return render_template('profile.html' , user = user)
+    user_family = Family.query.filter_by(id = user.FamilyID).first()
+    #print(user_family.familyname)
+    return render_template('profile.html' , user = user , user_family = user_family)
 
 @app.route('/feedpage/<username>', methods=['GET', 'POST'])
 # show the posts
@@ -50,11 +56,38 @@ def feedPage(username):
     posts = [row for row in TableOfContent if row[0].id == family_id]
     
 
+
     return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered)
+
     #User=user, Disp=DispContent, 
 
 #post it to the backend
 
 
 
-
+@app.route('/familypage/<int:family_id>')
+def family_page(family_id):
+    
+    user_family = Family.query.filter_by(id = family_id).first()
+    
+    posts = db.session.query(User,  Content, ContentPhotos)\
+    .join(Family, User.FamilyID == Family.id)\
+    .join(Content, User.id == Content.userId)\
+    .join(ContentPhotos, ContentPhotos.contentId == Content.id)\
+    .filter(Family.id == user_family.id)\
+    .all()
+    
+    
+    family_members = db.session.query(User).join(Family,User.FamilyID == Family.id)\
+    .filter(Family.id == user_family.id)\
+    .all()
+    
+    family_following = db.session.query(FamilyFollowing.FollowedFamilyId)\
+    .join(Family,Family.id == FamilyFollowing.FollowingFamilyId)\
+    .filter(Family.id == user_family.id)\
+    .all()
+    family_followed_ids = [id[0] for id in family_following]
+    
+    followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()    
+    
+    return render_template('family_page.html' ,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members)
