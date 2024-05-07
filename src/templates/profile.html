@@ -16,12 +16,12 @@
             </div>
             <div class="navigations">
                 <ul>
-                    <li class="menu-item"><a><span class="icon"><i class="fa-solid fa-house"></i></span> <span>Home</span> </a></li>
+                    <li class="menu-item"><a href="{{ url_for('feedPage', username=user.username) }}"><span class="icon"><i class="fa-solid fa-house"></i></span> <span>Home</span> </a></li>
                     <li class="menu-item"><a><span class="icon"><i class="fa-solid fa-bell"></i></span> <span>Notifications</span> </a></li>
                     <li class="menu-item"><a><span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span> <span>Search</span> </a></li>
-                    <li class="menu-item"><a><span class="icon"><i class="fa-regular fa-circle"></i></span> <span>Profile</span> </a></li>
-                    <li class="menu-item"><a><span class="icon"><i class="fa-regular fa-compass"></i></span> <span>Explore</span> </a></li>
-                    <li class="menu-item"><a><span class="icon"><i class="fa-regular fa-compass"></i></span> <span>My Family</span> </a></li>
+                    <li class="menu-item"><a href="{{ url_for('user', username=user.username) }}"><span class="icon"><i class="fa-regular fa-circle"></i></span> <span>Profile</span> </a></li>
+                    <li class="menu-item"><a href="{{ url_for('feedPage', username=user.username) }}"><span class="icon"><i class="fa-regular fa-compass"></i></span> <span>Explore</span> </a></li>
+                    <li class="menu-item"><a href="{{ url_for('family_page', family_id=user.FamilyID) }}"><span class="icon"><i class="fa-regular fa-compass"></i></span> <span>My Family</span> </a></li>
                 </ul>
             </div>
         </div>
