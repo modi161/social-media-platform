@@ -472,7 +472,23 @@ border-radius: var(--border-radius);
     margin: 0 0;
     font-size: 0.85rem;
     line-height: 1.5;
+    position:relative;
   }
+
+  .delete-post {
+    cursor: pointer;
+    height: 14px;
+    width: 14px;
+
+}
+
+.delete-post svg path {
+
+  fill:#a5a0a0;
+}
+
+
+
 
   .middle .feeds .feed:not(:first-child)
   {
@@ -482,6 +498,8 @@ border-radius: var(--border-radius);
   .middle .feed .head{
     display: flex;
     justify-content: space-between; 
+    align-items: center;
+
   }
 
   .middle .feed .user{
@@ -526,6 +544,57 @@ border-radius: var(--border-radius);
   .middle .liked-by p{
     margin-left: 0.5rem;
   }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 25% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    text-align: center;
+    filter: none; /* Remove blur */
+    padding: 51px;
+    border-radius: 2%;
+}
+
+.modal-content p
+{
+  margin-bottom: 20px;
+
+}
+
+.modal-content .confirm-btn
+{
+  background: red;
+  color: white;
+  border-radius: 8%;
+  padding: 5px 9px;
+  
+}
+
+
+.modal-content .cancel-btn
+{
+  background: green;
+  color: white;
+  border-radius: 8%;
+  padding: 5px 9px;
+  cursor:pointer;
+}
+
+
 
   .lucide--edit {
     display: inline-block;
@@ -602,10 +671,13 @@ border-radius: var(--border-radius);
   .messages .message .profile-photo img{
     border-radius: 50%;
     height: 100%;
+    object-fit: cover;
   }
   .messages .message .profile-photo{
     position: relative;
     overflow: visible;
+    width:3.7rem;
+    object-fit: cover;
   }
   .messages .message .profile-photo .active{
     width: 0.8rem;
