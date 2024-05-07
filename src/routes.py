@@ -1,10 +1,10 @@
-from flask import render_template , redirect ,request , flash
+from flask import render_template , redirect ,request , flash,url_for
 
 from src import app,db
 import sqlalchemy as sa
 
 
-
+from src.forms import editform
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing
 
@@ -65,16 +65,31 @@ def feedPage(username):
 
 
 
-@app.route('/familypage/<int:family_id>')
+@app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
 def family_page(family_id):
-    
     user_family = Family.query.filter_by(id = family_id).first()
+    form = editform()
     
+    if form.validate_on_submit():
+        if form.bio.data:
+            user_family.bio = form.bio.data
+            db.session.commit()  # Commit changes to the database
+            return redirect(url_for('family_page', family_id=family_id))
+        else:
+            # Handle form validation failure if needed
+            pass
+    else:
+        # This block only executes when the page first loads or if validation fails
+        if user_family:
+            form.bio.data = user_family.bio
+    
+        
     posts = db.session.query(User,  Content, ContentPhotos)\
     .join(Family, User.FamilyID == Family.id)\
     .join(Content, User.id == Content.userId)\
     .join(ContentPhotos, ContentPhotos.contentId == Content.id)\
     .filter(Family.id == user_family.id)\
+    .order_by(Content.timestamp.desc())\
     .all()
     
     
@@ -88,6 +103,6 @@ def family_page(family_id):
     .all()
     family_followed_ids = [id[0] for id in family_following]
     
-    followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()    
+    followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
     
-    return render_template('family_page.html' ,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members)
+    return render_template('family_page.html' ,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members)
