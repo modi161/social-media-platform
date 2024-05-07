@@ -41,15 +41,15 @@
                     </div>
                 </a>
 
-            <!--- side bar --->
+            <!-- side bar-->
                 <div class="sidebar">
                     <a class="active menu-item">
                         <span><span class="ant-design--home-outlined"></span></span> <h3>Home</h3>
                     </a>
-                    <a class="menu-item" href="{{ url_for('user', username=user.username) }}">
+                    <a class="menu-item" href="{{ url_for('user', username=User.username) }}">
                         <span><span class="iconoir--profile-circle"></span></span> <h3>Profile</h3>
                     </a>
-                    <a class="menu-item" href="{{ url_for('family_page', family_id=user.FamilyID) }}">
+                    <a class="menu-item" href="{{ url_for('family_page', family_id=User.FamilyID) }}">
                         <span><span class="iconoir--profile-circle"></span></span> <h3>My Family</h3>
                     </a>
                     <a class="menu-item">
@@ -106,6 +106,22 @@
                         <img src="{{url_for('static', filename='./images/profile1.png')}}">
                     </div>
                     <input type="text" placeholder="What is on your mind, {{ User.FirstName }}?" id="create-post">
+                    <span class="charm--image btn">
+                        <input type="file" accept="image/*" style="display: hidden;" id="post-images">
+                    </span>
+                    <span class="solar--album-bold btn">
+                        <input type="file" accept="image/*" style="display: hidden;" id="album-images">
+                    </span>
+                    <div class="dropdown">
+                        <div class="dropdown-select">
+                            <span class="ic--outline-privacy-tip btn"  id="selectedIcon"></span>
+                        </div>
+                        <div class="dropdown-list" style="display:none;">
+                            <div class="dropdown-item" data-icon="ic--outline-lock"><span class="ic--outline-lock btn"></span></div>
+                            <div class="dropdown-item" data-icon="ic--outline-key"><span class="solar--planet-broken btn"></span></div>
+                            <div class="dropdown-item" data-icon="ic--outline-star"><span class="fa-solid--user-friends"></span></div>
+                        </div>
+                    </div>
                     <input type="submit" value="Post" class="btn btn-primary">
                 </form>
 

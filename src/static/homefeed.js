@@ -1,3 +1,30 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownSelect = document.querySelector('.dropdown-select');
+    const dropdownList = document.querySelector('.dropdown-list');
+    const selectedIcon = document.getElementById('selectedIcon');
+
+    // Toggle dropdown list
+    dropdownSelect.addEventListener('click', function () {
+        dropdownList.style.display = dropdownList.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Handle dropdown item selection
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function () {
+            // Get the class from the span within the clicked item
+            const iconClass = item.querySelector('span').className;
+
+            // Update the selected icon
+            selectedIcon.className = iconClass;
+
+            // Close the dropdown list
+            dropdownList.style.display = 'none';
+        });
+    });
+});
+
+
+
 // Side bar
 const menuItems = document.querySelectorAll('.menu-item');
 // remove active class
@@ -49,3 +76,21 @@ const searchMessage=()=>{
     })
 }
 messageSearch.addEventListener("keyup",searchMessage)
+
+document.querySelector(".upload").addEventListener('click', function(){
+    var infoBox = document.querySelector(".info-box");
+    if(infoBox) infoBox.remove();
+});
+
+document.querySelector("#count").addEventListener('click', function(){
+    var num = document.querySelectorAll(".box-image").length;
+    document.querySelector(".counter").textContent = num;
+});
+
+document.querySelector('.charm--image').addEventListener('click', function() {
+    document.getElementById('post-images').click();
+});
+
+document.querySelector('.solar--album-bold').addEventListener('click', function() {
+    document.getElementById('album-images').click();
+});

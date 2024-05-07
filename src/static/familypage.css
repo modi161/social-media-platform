@@ -48,6 +48,11 @@ a:hover{
   color: var(--color-primary);
 }
 
+.button-edit{
+  background-color: var(--color-primary);
+  color: white;
+}
+
 .container{
     width: 80%;
     margin: 0 auto;
@@ -795,4 +800,54 @@ border-radius: var(--border-radius);
     main .container .right .friend-requests{
         display: none;
     }
+}
+
+
+
+
+
+/* Styles for the modal */
+.modal {
+display: none;
+position: fixed;
+z-index: 1;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0,0,0,0.4);
+}
+
+/* Styles for the modal content */
+.modal-content {
+background-color: #fefefe;
+margin: 15% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 80%;
+max-width: 400px;
+}
+
+.modal .modal-content form{
+  margin: 20px;
+  padding: 20px;
+}
+
+.modal .modal-content textarea{
+  border: 1px solid black;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.modal .modal-content input[type="submit"]{
+  background-color: var(--color-primary);
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.modal .modal-content span{
+  cursor: pointer;
 }
