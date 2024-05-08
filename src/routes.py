@@ -7,17 +7,36 @@ import sqlalchemy as sa
 from src.forms import Editform , Loginform , Signupform
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing
+from flask_login import current_user,login_user,login_required,logout_user
 
-
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
+@app.route('/start_page', methods=['GET', 'POST'])
 def start_page():
     form = Loginform()
+    if request.method == 'POST':
+        print(form.data)  # Check what data is actually being submitted
     sform = Signupform()
-    return render_template('index.html' , form = form , sform=sform)
+    if current_user.is_authenticated:
+        return redirect(url_for('feedPage', username=current_user.username))
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and user.password_hash == form.password.data:
+            login_user(user)
+            return redirect(url_for('feedPage', username=user.username))
+        else:
+            flash('Invalid username or password')
+            return redirect(url_for('start_page'))
+    return render_template('index.html', form=form , sform = sform)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('start_page'))
+
+
 
 @app.route('/user/<username>')
-# login_required should be added here ////////////////////
+@login_required
 def user(username):
     user = db.first_or_404(sa.select(User).where(User.username == username)) #will trigger a 404 error if user not found in the db
     user_family = Family.query.filter_by(id = user.FamilyID).first()
@@ -25,6 +44,7 @@ def user(username):
     return render_template('profile.html' , user = user , user_family = user_family)
 
 @app.route('/feedpage/<username>', methods=['GET', 'POST'])
+@login_required
 # show the posts
 def feedPage(username):
     user = db.first_or_404(sa.select(User).where(User.username == username))
@@ -68,6 +88,7 @@ def feedPage(username):
 
 
 @app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
+@login_required
 def family_page(family_id):
     user_family = Family.query.filter_by(id = family_id).first()
     form = Editform()
@@ -112,6 +133,7 @@ def family_page(family_id):
     
 
 @app.route('/familypage/DeletePost/<int:content_id>')
+@login_required
 def family_page_delete_content(content_id):
     
     photos = ContentPhotos.query.filter_by(contentId=content_id).all()

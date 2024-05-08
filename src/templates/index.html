@@ -46,7 +46,7 @@
       </form>
     </div>
     <div class="form-container sign-in">
-        <form action="" method="post" novalidate name="action" value="signin" >
+        <form action="{{ url_for('start_page') }}" method="post" novalidate name="action" value="signin" >
           {{form.hidden_tag()}}
           <h1>Sign in</h1>
           <div class="social-icons">

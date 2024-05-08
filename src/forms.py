@@ -11,7 +11,7 @@ class Editform(FlaskForm):
 
  
 class Loginform(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email(message='Invalid email')],render_kw={"placeholder": "Email"})
+    email = StringField('Email', validators=[DataRequired()],render_kw={"placeholder": "Email"})
     password = PasswordField('Password' , validators=[DataRequired()],render_kw={"placeholder": "Password"}) 
     log = SubmitField('Login')
     
