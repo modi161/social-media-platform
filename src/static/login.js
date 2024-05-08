@@ -9,3 +9,14 @@ registerBtn.addEventListener('click', () => {
 loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
 });
+
+function toggleTextField() {
+    var textField = document.getElementById("familyTextField");
+    var checkbox = document.getElementById("cbx-12");
+    
+    if (checkbox.checked) {
+        textField.style.display = "block";
+    } else {
+        textField.style.display = "none";
+    }
+}
