@@ -4,15 +4,17 @@ from src import app,db
 import sqlalchemy as sa
 
 
-from src.forms import editform
+from src.forms import Editform , Loginform , Signupform
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing
 
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def start_page():
-    return render_template('index.html')
+    form = Loginform()
+    sform = Signupform()
+    return render_template('index.html' , form = form , sform=sform)
 
 @app.route('/user/<username>')
 # login_required should be added here ////////////////////
@@ -68,7 +70,7 @@ def feedPage(username):
 @app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
 def family_page(family_id):
     user_family = Family.query.filter_by(id = family_id).first()
-    form = editform()
+    form = Editform()
     
     if form.validate_on_submit():
         if form.bio.data:

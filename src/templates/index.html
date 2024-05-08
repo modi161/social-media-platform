@@ -13,48 +13,51 @@
 <main>
 <div class="container" id="container">
     <div class="form-container sign-up">
-        <form name="action" value="signup">
-            <h1>Create Account</h1>
-            <div class="social-icons">
-            </div>
-            <input type="text" placeholder="Name">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Password">
-            <div class="checkbox-family">
-                <div class="checkbox-wrapper-12">
-                    <div class="cbx">
-                      <input id="cbx-12" type="checkbox" onchange="toggleTextField()"/>
-                      <label for="cbx-12"></label>
-                      <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
-                        <path d="M2 8.36364L6.23077 12L13 2"></path>
-                      </svg>
-                    </div>
-                    <!-- Gooey-->
-                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                      <defs>
-                        <filter id="goo-12">
-                          <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
-                          <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
-                          <feblend in="SourceGraphic" in2="goo-12"></feblend>
-                        </filter>
-                      </defs>
-                    </svg>
-                  </div>
-                <b>Join a family?</b>
-                </div>
-            <input type="text" id="familyTextField" style="display: none;" placeholder="Family ID">
-            <button>Sign Up</button>
-        </form>
+      <form name="action" value="signup" method="post" novalidate >
+        {{sform.hidden_tag()}}
+        <h1>Create Account</h1>
+        <div class="social-icons"></div>
+        {{sform.username()}}
+        {{sform.email()}}
+        {{sform.password()}}
+        <div class="checkbox-family">
+          <div class="checkbox-wrapper-12">
+              <div class="cbx">
+                {{ sform.toggle(id='cbx-12', onchange="toggleTextField()") }}
+                <label for="cbx-12"></label>
+                <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
+                  <path d="M2 8.36364L6.23077 12L13 2"></path>
+                </svg>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                <defs>
+                  <filter id="goo-12">
+                    <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
+                    <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
+                    <feblend in="SourceGraphic" in2="goo-12"></feblend>
+                  </filter>
+                </defs>
+              </svg>
+          </div>
+          <b>Join a family?</b>
+        </div>
+        {{ sform.family_id(id="familyTextField", placeholder="Family ID") }}
+        {{sform.submit()}}
+      </form>
     </div>
     <div class="form-container sign-in">
-        <form name="action" value="signin">
-            <h1>Sign In</h1>
-            <div class="social-icons">
-            </div>
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Password">
-            <a href="#">Forget Your Password?</a>
-            <button>Sign In</button>
+        <form action="" method="post" novalidate name="action" value="signin" >
+          {{form.hidden_tag()}}
+          <h1>Sign in</h1>
+          <div class="social-icons">
+          </div>
+            {{form.email()}}
+            {% for error in form.email.errors %}
+                  <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+            {{form.password()}}
+          <a href="#">Forgot Your Password ?</a>
+          {{form.log()}}
         </form>
     </div>
     <div class="toggle-container">
