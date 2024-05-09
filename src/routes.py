@@ -10,8 +10,8 @@ from src.models import Content, ContentPhotos, Family, FamilyFollowing
 from flask_login import current_user,login_user,login_required,logout_user
 
 @app.route('/')
-@app.route('/start_page', methods=['GET', 'POST'])
-def start_page():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     form = Loginform()
     if request.method == 'POST':
         print(form.data)  # Check what data is actually being submitted
@@ -21,32 +21,36 @@ def start_page():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.password_hash == form.password.data:
-            login_user(user)
+            login_user(user , remember=True)
             return redirect(url_for('feedPage', username=user.username))
         else:
             flash('Invalid username or password')
-            return redirect(url_for('start_page'))
+            return redirect(url_for('login'))
     return render_template('index.html', form=form , sform = sform)
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('start_page'))
+    return redirect(url_for('login'))
 
 
 
 @app.route('/user/<username>')
 @login_required
 def user(username):
+    if current_user.username != username and not request.referrer:
+        return redirect(url_for('logout'))
     user = db.first_or_404(sa.select(User).where(User.username == username)) #will trigger a 404 error if user not found in the db
     user_family = Family.query.filter_by(id = user.FamilyID).first()
     #print(user_family.familyname)
-    return render_template('profile.html' , user = user , user_family = user_family)
+    return render_template('profile.html' , user = user , user_family = user_family , current_user = current_user)
 
 @app.route('/feedpage/<username>', methods=['GET', 'POST'])
 @login_required
 # show the posts
 def feedPage(username):
+    if current_user.username != username:
+        return redirect(url_for('logout'))
     user = db.first_or_404(sa.select(User).where(User.username == username))
     family_id = user.FamilyID
 
@@ -90,6 +94,8 @@ def feedPage(username):
 @app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
 @login_required
 def family_page(family_id):
+    if current_user.FamilyID != family_id and not request.referrer:
+        return redirect(url_for('logout'))
     user_family = Family.query.filter_by(id = family_id).first()
     form = Editform()
     
@@ -128,7 +134,7 @@ def family_page(family_id):
     
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
-    return render_template('family_page.html' ,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members)
+    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members)
 
     
 

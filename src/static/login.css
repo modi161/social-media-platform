@@ -6,6 +6,26 @@
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
+:root {
+  --color-white: hsl(252,30%,100%);
+  --color-light: hsl(252,30%,95%);
+  --color-gray:hsl(252,15%,65%);
+  --color-primary:hsl(252,75%,60%);
+  --color-secondary:hsl(252,100%,90%);
+  --color-success:hsl(120,95%,65%);
+  --color-danger:hsl(0,95%,65%);
+  --color-dark:hsl(252,30%,17%);
+  --color-black:hsl(252,30%,10%);
+  
+  --border-radius:2rem;
+  --card-border-raduis:1rem;
+  --btn-padding:0.6rem 1rem;
+  --card-padding:1rem;
+  --search-padding:0.6rem 1rem;
+  
+  --sticky-top-left:5.4rem;
+  --sticky-top-right:-18rem;
+  }
 
 body{
     background-color: #c9d6ff;
@@ -359,4 +379,28 @@ body{
 
 .checkbox-family b{
     width: 85%;
+}
+
+
+.flash-message {
+  position: relative;
+  background-color: var(--color-secondary);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  width: 70%;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+
+/* Fade transition */
+.fade {
+  transition: opacity 0.5s ease-out;
 }
