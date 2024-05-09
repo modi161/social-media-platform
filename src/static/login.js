@@ -20,3 +20,18 @@ function toggleTextField() {
         textField.style.display = "none";
     }
 }
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const closeButtons = document.querySelectorAll('.close-btn');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const flashMessage = this.parentNode;
+            flashMessage.classList.remove('fade');
+            setTimeout(() => {
+                flashMessage.remove();
+            }, 500); // Adjust the timeout to match your CSS transition duration
+        });
+    });
+});

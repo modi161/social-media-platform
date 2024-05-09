@@ -31,7 +31,7 @@
             <div class="left">
                 <a class="profile">
                     <div class="profile-photo">
-                        <img src="{{url_for('static', filename='./images/profile1.png')}}">
+                        <img src="{{User.photo}}">
                     </div>
                     <div class="handle">
                         <h4> {{User.FirstName}} {{User.lastname}}</h4>
@@ -94,6 +94,9 @@
                     </a>
                     <a class="menu-item">
                         <span><span class="solar--settings-linear"></span></span> <h3>Settings</h3>
+                    </a>
+                    <a class="menu-item" href="{{ url_for('logout') }}">
+                        <span><span class="solar--settings-linear"></span></span> <h3>Logout</h3>
                     </a>
                 </div>
                 <label for="create-post" class="btn btn-primary">Create Post</label>
