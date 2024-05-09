@@ -2,12 +2,14 @@ from flask import render_template , redirect ,request , flash,url_for
 
 from src import app,db
 import sqlalchemy as sa
-
+import time
 
 from src.forms import Editform , Loginform , Signupform
 from src.models import User
-from src.models import Content, ContentPhotos, Family, FamilyFollowing
+from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
+
 from flask_login import current_user,login_user,login_required,logout_user
+
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
@@ -55,20 +57,35 @@ def feedPage(username):
     family_id = user.FamilyID
 
     if request.method == 'POST':
-        additional_data = request.form['additional_data']
-        newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
-        db.session.add(newFollowing)
-        db.session.commit()
-    
+        post_id = request.form.get('like') or request.form.get('unlike')
+        action = 'like' if request.form.get('like') else 'unlike'
+        if 'follow' in request.form:
+            additional_data = request.form['additional_data']
+            newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
+            db.session.add(newFollowing)
+            db.session.commit()
+        elif action == 'like':
+            print("IM HERE")
+            time.sleep(1)
+            contentID = request.form['like']
+            newLike = UserLikedContent(UserId = user.id, ContentId = post_id)
+            db.session.add(newLike)
+            db.session.commit()
+        elif action == 'unlike':
+            print("IM THERE")
+            time.sleep(1)
+            contentID = request.form['unlike']
+            entry_to_delete = db.session.query(UserLikedContent).filter(UserLikedContent.ContentId == post_id, UserLikedContent.UserId == user.id).first()
+            db.session.delete(entry_to_delete)
+            db.session.commit()
+
     # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
     alredy_followed_families = []
     for family in alredy_followed:
         alredy_followed_families.append(family.FollowedFamilyId)
 
-    print(alredy_followed_families)
-    
-    print(alredy_followed)
+
     families = Family.query.filter(Family.id != family_id).all()
 
     TableOfContent = db.session.query(Family, FamilyFollowing, User, Content, ContentPhotos).\
@@ -80,10 +97,17 @@ def feedPage(username):
     families_filtered = [row for row in families if row.id not in alredy_followed_families]
     
     posts = [row for row in TableOfContent if row[0].id == family_id]
-    
+    print(posts)
 
 
-    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered)
+    # Liked content
+
+    LikedContent = UserLikedContent.query.filter(UserLikedContent.UserId == user.id).all()
+    alredy_liked = []
+    for liked in LikedContent:
+        alredy_liked.append(liked.ContentId)
+    print(alredy_liked)
+    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = alredy_liked)
 
     #User=user, Disp=DispContent, 
 

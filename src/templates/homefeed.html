@@ -150,8 +150,19 @@
                             </div>
                             <div class="action-button">
                                 <div class="interaction-buttons">
-                                    <span class="ph--heart"></span>
-                                    <span class="iconamoon--comment-bold"></span>
+                                    {% if post[3].id in Liked %}
+                                        <form class="action unlike-action" action="/feedpage/{{ User.username }}" method="post" data-post-id="{{ post[3].id }}" data-action="unlike">
+                                            <input type="hidden" name="unlike" value="{{ post[3].id }}">
+                                            <button type="submit" class="ph--heart-liked like-unlike-button"></button>
+                                            <span class="iconamoon--comment-bold"></span>
+                                        </form>
+                                    {% else %}
+                                        <form class="action like-action" action="/feedpage/{{ User.username }}" method="post" data-post-id="{{ post[3].id }}" data-action="like">
+                                            <input type="hidden" name="like" value="{{ post[3].id }}">
+                                            <button type="submit" class="ph--heart like-unlike-button"></button>
+                                            <span class="iconamoon--comment-bold"></span>
+                                        </form>    
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="liked-by">
@@ -232,6 +243,7 @@
             </div>
         </div>
     </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{url_for('static', filename='homefeed.js')}}"></script>
 </body>
 </html>
