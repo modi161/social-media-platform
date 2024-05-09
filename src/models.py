@@ -7,6 +7,9 @@ from sqlalchemy import Integer , String , Boolean , Date , ForeignKey ,Text
 from sqlalchemy.orm import Mapped , mapped_column
 #from src import db
 from datetime import datetime,timezone
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+from src import login
 
 
 class  Family(db.Model):
@@ -25,7 +28,7 @@ class  Family(db.Model):
     profilephoto : Mapped[str] = mapped_column(String(250))
 
 
-class User(db.Model):
+class User(db.Model,UserMixin):
     __tablename__ = "user"
     
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -57,7 +60,16 @@ class User(db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
     
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
     
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
     
     
 class Content(db.Model):
