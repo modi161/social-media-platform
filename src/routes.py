@@ -1,4 +1,4 @@
-from flask import render_template , redirect ,request , flash,url_for
+from flask import render_template , redirect ,request , flash,url_for, jsonify
 
 from src import app,db
 import sqlalchemy as sa
@@ -58,14 +58,21 @@ def feedPage(username):
 
     if request.method == 'POST':
         post_id = request.form.get('like') or request.form.get('unlike')
-        action = 'like' if request.form.get('like') else 'unlike'
-        if 'follow' in request.form:
+        if request.form.get('like'):
+            action = 'like'  
+        elif  request.form.get('unlike'):
+            action = 'unlike'
+        else:
+            action = 'follow'
+
+        if action == 'follow':
+            print("IM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
             additional_data = request.form['additional_data']
             newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
             db.session.add(newFollowing)
             db.session.commit()
-        elif action == 'like':
-            print("IM HERE")
+
+        if action == 'like':
             time.sleep(1)
             contentID = request.form['like']
             newLike = UserLikedContent(UserId = user.id, ContentId = post_id)
@@ -79,7 +86,7 @@ def feedPage(username):
             db.session.delete(entry_to_delete)
             db.session.commit()
 
-    # show families to be followed
+        # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
     alredy_followed_families = []
     for family in alredy_followed:
@@ -96,6 +103,8 @@ def feedPage(username):
     
     families_filtered = [row for row in families if row.id not in alredy_followed_families]
     
+    print(families_filtered)
+
     posts = [row for row in TableOfContent if row[0].id == family_id]
     print(posts)
 
@@ -109,7 +118,7 @@ def feedPage(username):
     print(alredy_liked)
     return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = alredy_liked)
 
-    #User=user, Disp=DispContent, 
+#User=user, Disp=DispContent, 
 
 #post it to the backend
 
