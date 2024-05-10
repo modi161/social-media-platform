@@ -35,6 +35,10 @@ class ContentForm(FlaskForm):
     postImage = FileField("Image")  
     albumImage = FileField("Image")  
     submit = SubmitField("Submit")
+    
+class DeleteContentForm(FlaskForm):
+    contentID =  IntegerField("Type", validators=[DataRequired()])
+    submit = SubmitField("Submit")
 
     
     
