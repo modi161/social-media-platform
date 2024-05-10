@@ -1,4 +1,4 @@
-from flask import render_template , redirect ,request , flash,url_for
+from flask import render_template , redirect ,request , flash,url_for, jsonify
 
 from src import app,db
 import sqlalchemy as sa
@@ -156,7 +156,8 @@ def feedPage(username):
     #         db.session.delete(entry_to_delete)
     #         db.session.commit()
 
-    # show families to be followed
+
+        # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
     alredy_followed_families = []
     for family in alredy_followed:
@@ -173,6 +174,8 @@ def feedPage(username):
     
     families_filtered = [row for row in families if row.id not in alredy_followed_families]
     
+    print(families_filtered)
+
     posts = [row for row in TableOfContent if row[0].id == family_id]
     # print(posts)
 
@@ -186,7 +189,7 @@ def feedPage(username):
     print(alredy_liked)
     return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = alredy_liked, form = form)
 
-    #User=user, Disp=DispContent, 
+#User=user, Disp=DispContent, 
 
 #post it to the backend
 
