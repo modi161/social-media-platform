@@ -17,7 +17,7 @@ my_cursor = my_db.cursor()
 
 
 
-my_cursor.execute("Select * from content")
+my_cursor.execute("Select * from contentphotos")
 
 
 
