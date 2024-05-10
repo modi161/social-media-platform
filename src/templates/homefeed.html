@@ -104,28 +104,44 @@
             </div>
             <!--start of middle-->
             <div class="middle">
-                <form class="create-post">
+                <form method = "POST" class="create-post" enctype="multipart/form-data">
+                    {{form.hidden_tag()}}
+
                     <div class="profile-photo">
                         <img src="{{url_for('static', filename='./images/profile1.png')}}">
                     </div>
-                    <input type="text" placeholder="What is on your mind, {{ User.FirstName }}?" id="create-post">
-                    <span class="charm--image btn">
-                        <input type="file" accept="image/*" style="display: hidden;" id="post-images">
+
+                    {{  form.description(id="create-post")
+                    }}
+
+                    <span class="charm--image btn post-images">
+                        {{form.postImage(accept="image/*", style="display: hidden;", id="post-images")}}
+                       <!-- <input type="file" accept="image/*" style="display: hidden;" id="post-images">-->
                     </span>
-                    <span class="solar--album-bold btn">
-                        <input type="file" accept="image/*" style="display: hidden;" id="album-images">
+                    <span class="solar--album-bold btn album-images">
+                        {{form.albumImage(accept="image/*", style="display: hidden;", id="album-images")}}
+                        <!-- <input type="file" accept="image/*" style="display: hidden;" id="album-images"> -->
                     </span>
                     <div class="dropdown">
                         <div class="dropdown-select">
                             <span class="ic--outline-privacy-tip btn"  id="selectedIcon"></span>
                         </div>
                         <div class="dropdown-list" style="display:none;">
-                            <div class="dropdown-item" data-icon="ic--outline-lock"><span class="ic--outline-lock btn"></span></div>
-                            <div class="dropdown-item" data-icon="ic--outline-key"><span class="solar--planet-broken btn"></span></div>
-                            <div class="dropdown-item" data-icon="ic--outline-star"><span class="fa-solid--user-friends"></span></div>
+                            <div class="dropdown-item" data-icon="ic--outline-lock"><span data-post-type = "0" class="ic--outline-lock btn"></span></div>
+                            <div class="dropdown-item" data-icon="ic--outline-key"><span data-post-type = "1" class="solar--planet-broken btn"></span></div>
                         </div>
                     </div>
-                    <input type="submit" value="Post" class="btn btn-primary">
+
+                    {{form.visibility(type = "hidden", class = "add-post-visibility")}}
+
+                    {{form.userID(type = "hidden", value = User.id)}}
+
+                    {{form.type(type = "hidden", class ="add-post-type")}} 
+
+
+
+                    {{form.submit(class="btn btn-primary")}}
+
                 </form>
 
                 <!-- Feed -->

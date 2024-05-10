@@ -3,12 +3,15 @@ from flask import render_template , redirect ,request , flash,url_for, jsonify
 from src import app,db
 import sqlalchemy as sa
 import time
+from sqlalchemy import desc
 
-from src.forms import Editform , Loginform , Signupform
+from src.forms import Editform , Loginform , Signupform, ContentForm
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
 
 from flask_login import current_user,login_user,login_required,logout_user
+import os
+
 
 
 @app.route('/')
@@ -55,36 +58,104 @@ def feedPage(username):
         return redirect(url_for('logout'))
     user = db.first_or_404(sa.select(User).where(User.username == username))
     family_id = user.FamilyID
-
-    if request.method == 'POST':
-        post_id = request.form.get('like') or request.form.get('unlike')
-        if request.form.get('like'):
-            action = 'like'  
-        elif  request.form.get('unlike'):
-            action = 'unlike'
+    
+    form  = ContentForm()
+    image_path = "dc" #will be deleted
+    #When submit form, it will create object from Content including the submitted data.
+    if form.validate_on_submit():
+        content = Content(description = form.description.data, visibility = form.visibility.data, userId = form.userID.data, Type = form.type.data)
+        
+        db.session.add(content)
+        db.session.commit()
+        
+        contentID = Content.query.order_by(desc(Content.timestamp)).first().id
+        
+        contentPhotos = ContentPhotos(contentId = contentID) #How to get above content id?
+        print("Content ID:")
+        print(contentID)
+        
+        if content.Type == 1:
+            image = form.postImage.data
+            print(image)
+            if image:
+                filename = f"{contentID}-{image.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                image.save(image_path)
+                
+                
+                image_path = f"../static/images/{filename}"
+                contentPhotos.photoUrl = image_path 
+                
+                print(image_path)
+                
+                
         else:
-            action = 'follow'
+            image = form.albumImage.data
+            if image:
+                filename = f"{contentID}-{image.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                image.save(image_path)
+                
+                image_path = f"../static/images/{filename}"
+                contentPhotos.photoUrl = image_path 
+                
+                print(image_path)
+                
+        db.session.add(contentPhotos)
+        db.session.commit()
 
-        if action == 'follow':
-            print("IM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-            additional_data = request.form['additional_data']
-            newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
-            db.session.add(newFollowing)
-            db.session.commit()
 
-        if action == 'like':
-            time.sleep(1)
-            contentID = request.form['like']
-            newLike = UserLikedContent(UserId = user.id, ContentId = post_id)
-            db.session.add(newLike)
-            db.session.commit()
-        elif action == 'unlike':
-            print("IM THERE")
-            time.sleep(1)
-            contentID = request.form['unlike']
-            entry_to_delete = db.session.query(UserLikedContent).filter(UserLikedContent.ContentId == post_id, UserLikedContent.UserId == user.id).first()
-            db.session.delete(entry_to_delete)
-            db.session.commit()
+
+        
+
+        #Clear everything (TO DO)
+        form.description.data = None #to clear the form after adding post
+        form.type.data = None
+        form.visibility.data = None
+        form.postImage.data = None
+        
+
+        
+        #flash message
+        
+        #return same page, SHOULD I RETURN IT? or when click on add it will call this function and by default it will return to the page at the end
+    
+        
+        
+    
+        
+        
+    
+    
+    
+    
+    
+    
+
+    #Like and Unlike part: (RASHAAAAAD Go and eat Fatosh!!!!!)
+    # if request.method == 'POST':
+    #     post_id = request.form.get('like') or request.form.get('unlike')
+    #     action = 'like' if request.form.get('like') else 'unlike'
+    #     if 'follow' in request.form:
+    #         additional_data = request.form['additional_data']
+    #         newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
+    #         db.session.add(newFollowing)
+    #         db.session.commit()
+    #     elif action == 'like':
+    #         print("IM HERE")
+    #         time.sleep(1)
+    #         contentID = request.form['like']
+    #         newLike = UserLikedContent(UserId = user.id, ContentId = post_id)
+    #         db.session.add(newLike)
+    #         db.session.commit()
+    #     elif action == 'unlike':
+    #         print("IM THERE")
+    #         time.sleep(1)
+    #         contentID = request.form['unlike']
+    #         entry_to_delete = db.session.query(UserLikedContent).filter(UserLikedContent.ContentId == post_id, UserLikedContent.UserId == user.id).first()
+    #         db.session.delete(entry_to_delete)
+    #         db.session.commit()
+
 
         # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
@@ -106,7 +177,7 @@ def feedPage(username):
     print(families_filtered)
 
     posts = [row for row in TableOfContent if row[0].id == family_id]
-    print(posts)
+    # print(posts)
 
 
     # Liked content
@@ -116,7 +187,7 @@ def feedPage(username):
     for liked in LikedContent:
         alredy_liked.append(liked.ContentId)
     print(alredy_liked)
-    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = alredy_liked)
+    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = alredy_liked, form = form)
 
 #User=user, Disp=DispContent, 
 

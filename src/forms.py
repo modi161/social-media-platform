@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField,FileField
 from wtforms.validators import DataRequired ,Email
 from flask_wtf.file import FileField, FileAllowed
+import os
 
 class Editform(FlaskForm):
     bio = TextAreaField('Bio')
@@ -25,6 +26,16 @@ class Signupform(FlaskForm):
     family_id = StringField('Family ID', render_kw={"style": "display: none;", "placeholder": "Family ID"})
     submit = SubmitField('Sign Up')
     pass    
+    
+class ContentForm(FlaskForm):
+    description = StringField('Description', validators=[DataRequired()], render_kw={"placeholder": "What is on your mind"})
+    visibility =  IntegerField("Visibility",validators=[DataRequired()])
+    type =  IntegerField("Type", validators=[DataRequired()])
+    userID =  IntegerField("Type", validators=[DataRequired()])
+    postImage = FileField("Image")  
+    albumImage = FileField("Image")  
+    submit = SubmitField("Submit")
+
     
     
 
