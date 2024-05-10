@@ -84,6 +84,7 @@ class Content(db.Model):
     # 1 = visibale 0 = not visibale
     visibility : Mapped[bool] = mapped_column(Boolean , nullable=False)
     
+    #1 = post , 2 = album
     Type : Mapped[bool] = mapped_column(Boolean , nullable=False)
     
     userId : Mapped[int] = mapped_column(ForeignKey(User.id) ,index=True ,nullable=False)
