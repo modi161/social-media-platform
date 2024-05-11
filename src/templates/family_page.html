@@ -41,7 +41,7 @@
   </div>
     <nav>
         <div class="container">
-            <h2 class="log">Reunion</h2>
+            <h2 class="log"><a href="{{ url_for('feedPage', username=current_user.username) }}">Reunion</a></h2>
             <div class="search-bar">
                 <span class="lucide--search"></span>
                 <input type="search" placeholder="Search for Families or Friends">
@@ -187,6 +187,11 @@
                         </div>
                         <div class="message-body">
                             <h5><a href="{{ url_for('family_page', family_id=followed_fam.id) }}" >{{followed_fam.familyname}}</a></h5>
+                            <form method="post">
+                                {{ Unfollow.hidden_tag() }}
+                                {{ Unfollow.FamilyId(type = "hidden", value = followed_fam.id) }}
+                                {{ Unfollow.submit3(class="btn btn-primary") }}
+                            </form>
                             <p class="text-bold">{{followed_fam.bio}}</p>
                         </div>
                     </div>
