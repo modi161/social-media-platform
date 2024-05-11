@@ -5,7 +5,7 @@ import sqlalchemy as sa
 import time
 from sqlalchemy import desc
 
-from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm
+from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, LikeForm, UnlikeForm, UnfollowForm
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
 
@@ -31,7 +31,7 @@ def login():
         else:
             flash('Invalid username or password')
             return redirect(url_for('login'))
-    return render_template('index.html', form=form , sform = sform)
+    return render_template('index.html', form=form , sform = sform, currentuser = current_user)
 
 @app.route('/logout')
 def logout():
@@ -60,6 +60,9 @@ def feedPage(username):
     family_id = user.FamilyID
     
     form  = ContentForm()
+    followingform = FollowForm()
+    likeForm = LikeForm()
+    Unlikeform = UnlikeForm()
     #When submit form, it will create object from Content including the submitted data.
     if form.validate_on_submit():
         content = Content(description = form.description.data, visibility = form.visibility.data, userId = form.userID.data, Type = form.type.data)
@@ -102,61 +105,50 @@ def feedPage(username):
                 
         db.session.add(contentPhotos)
         db.session.commit()
-
-
-
-        
-
         #Clear everything (TO DO)
         form.description.data = None #to clear the form after adding post
         form.type.data = None
         form.visibility.data = None
-        form.postImage.data = None
-        
-
-        
+        form.postImage.data = None 
         #flash message
-        
         #return same page, SHOULD I RETURN IT? or when click on add it will call this function and by default it will return to the page at the end
     
-        
-        
-    
-        
-        
-    
-    
-    
-    
-    
+
+    # Follow form
     
 
-    #Like and Unlike part: (RASHAAAAAD Go and eat Fatosh!!!!!)
-    # if request.method == 'POST':
-    #     post_id = request.form.get('like') or request.form.get('unlike')
-    #     action = 'like' if request.form.get('like') else 'unlike'
-    #     if 'follow' in request.form:
-    #         additional_data = request.form['additional_data']
-    #         newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
-    #         db.session.add(newFollowing)
-    #         db.session.commit()
-    #     elif action == 'like':
-    #         print("IM HERE")
-    #         time.sleep(1)
-    #         contentID = request.form['like']
-    #         newLike = UserLikedContent(UserId = user.id, ContentId = post_id)
-    #         db.session.add(newLike)
-    #         db.session.commit()
-    #     elif action == 'unlike':
-    #         print("IM THERE")
-    #         time.sleep(1)
-    #         contentID = request.form['unlike']
-    #         entry_to_delete = db.session.query(UserLikedContent).filter(UserLikedContent.ContentId == post_id, UserLikedContent.UserId == user.id).first()
-    #         db.session.delete(entry_to_delete)
-    #         db.session.commit()
+
+    if followingform.validate_on_submit() and followingform.submit.data:
+        print("2")
+        newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  followingform.followedFamily.data)
+        db.session.add(newFollowing)
+        db.session.commit()
+        followingform.followedFamily.data = None #to clear the form after adding post
+
+        
+    #Like Form
+    
+
+    if likeForm.validate_on_submit() and likeForm.submit1.data:
+        print(likeForm.ContentId.data)
+        print(user.id)
+        newLike = UserLikedContent(UserId = user.id, ContentId = likeForm.ContentId.data)
+        db.session.add(newLike)
+        db.session.commit()
+        likeForm.ContentId.data = None
+    
+    
+    # Unlike Form
+    
+
+    if Unlikeform.validate_on_submit() and Unlikeform.submit2.data:
+        entry_to_delete = db.session.query(UserLikedContent).filter(UserLikedContent.ContentId == Unlikeform.ContentId.data, UserLikedContent.UserId == user.id).first()
+        db.session.delete(entry_to_delete)
+        db.session.commit()
+        Unlikeform.ContentId.data = None
 
 
-        # show families to be followed
+    # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
     alredy_followed_families = []
     for family in alredy_followed:
@@ -173,24 +165,20 @@ def feedPage(username):
     
     families_filtered = [row for row in families if row.id not in alredy_followed_families]
     
-    print(families_filtered)
 
     posts = [row for row in TableOfContent if row[0].id == family_id]
-    # print(posts)
 
 
     # Liked content
 
     LikedContent = UserLikedContent.query.filter(UserLikedContent.UserId == user.id).all()
-    alredy_liked = []
+    already_liked = []
     for liked in LikedContent:
-        alredy_liked.append(liked.ContentId)
-    print(alredy_liked)
-    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = alredy_liked, form = form)
+        already_liked.append(liked.ContentId)
+    
+    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = already_liked, form = form, followingForm = followingform, LikingForm = likeForm, UnlinkingForm = Unlikeform)
 
-#User=user, Disp=DispContent, 
 
-#post it to the backend
 
 
 
@@ -200,7 +188,7 @@ def family_page(family_id):
     
     deleteForm  = DeleteContentForm()
     
-    if deleteForm.validate_on_submit():        
+    if deleteForm.validate_on_submit() and deleteForm.submit.data:        
         contentId = deleteForm.contentID.data
         content = Content.query.get(contentId)
 
@@ -234,7 +222,12 @@ def family_page(family_id):
         if user_family:
             form.bio.data = user_family.bio
     
-        
+    unfollow = UnfollowForm()
+    if unfollow.validate_on_submit() and unfollow.submit3.data:
+        entry_to_delete = db.session.query(FamilyFollowing).filter(FamilyFollowing.FollowingFamilyId == family_id, FamilyFollowing.FollowedFamilyId == unfollow.FamilyId.data).first()
+        db.session.delete(entry_to_delete)
+        db.session.commit()
+
     posts = db.session.query(User,  Content, ContentPhotos)\
     .join(Family, User.FamilyID == Family.id)\
     .join(Content, User.id == Content.userId)\
@@ -256,7 +249,7 @@ def family_page(family_id):
     
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
-    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm)
+    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm, Unfollow = unfollow)
 
     
     

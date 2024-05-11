@@ -126,37 +126,3 @@ document.querySelector('.charm--image').addEventListener('click', function() {
 document.querySelector('.solar--album-bold').addEventListener('click', function() {
     document.getElementById('album-images').click();
 });
-
-
-
-$(document).ready(function() {
-    // Add event listener to like/unlike buttons
-    $('.like-unlike-button').click(function(event) {
-        event.preventDefault(); // Prevent default form submission behavior
-        event.stopPropagation(); // Prevent event propagation
-
-        var $form = $(this).closest('.action');
-        var postId = $form.data('post-id');
-        var action = $form.data('action');
-        var username = "{{ username }}"; // Replace with the actual username
-
-        // Send AJAX request to the server
-        $.ajax({
-            url: '/feedpage/' + username,
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ post_id: postId, action: action }),
-            success: function(response) {
-                console.log(response.message);
-                // Optionally update UI based on response
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    });
-});
-
-
-
-

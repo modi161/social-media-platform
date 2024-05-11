@@ -40,21 +40,24 @@ class DeleteContentForm(FlaskForm):
     contentID =  IntegerField("Type", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
-    
-    
+class FollowForm(FlaskForm):
+    followedFamily = IntegerField("Followed", validators=[DataRequired()])
+    submit = SubmitField("Follow")
 
 
+class LikeForm(FlaskForm):
+    ContentId = IntegerField("Id", validators=[DataRequired()])
+    submit1 = SubmitField(" ")
+    
 
-
+class UnlikeForm(FlaskForm):
+    ContentId = IntegerField("Id", validators=[DataRequired()])
+    submit2 = SubmitField(" ")
     
     
-
-    
-    
-    
-    
-        
-
+class UnfollowForm(FlaskForm):
+    FamilyId = IntegerField("Id", validators=[DataRequired()])
+    submit3 = SubmitField("unfollow")
     
 
     
