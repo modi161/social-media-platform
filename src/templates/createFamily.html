@@ -15,6 +15,7 @@
 <body>
 
     <main>
+        <form>
         <div class ="photo-section">
             <div class ="family_photo">
                 <div class ="family_cover_img" id="family-cover-photo">
@@ -55,7 +56,7 @@
                 <!-- Feed -->
                 <div class="feeds">
                     {{createfam.createfam()}}
-                    <label class="btn btn-primary" id="submit-button" type="submit">Create Family</label>
+                    {#<label class="btn btn-primary" id="submit-button" type="submit">Create Family</label>#}
                 </div>
                 <!-- end Feed -->
             <!--end of middle-->
@@ -67,7 +68,7 @@
             </div>
         </div>
 
-
+    </form>
     </main>
     <script src="{{ url_for('static', filename='createFamily.js' ) }}"></script>
     

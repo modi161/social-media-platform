@@ -84,7 +84,7 @@ class CreateFamilyForm(FlaskForm):
                                    validators=[FileAllowed(['jpg', 'png'], 'Images only!')],
                                    id='family-cover-input')
     
-    createfam = SubmitField('Create Family')
+    createfam = SubmitField('Create Family' ,id='submit-button' ,render_kw={"class": "btn btn-primary"})
     
 
 
