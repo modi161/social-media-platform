@@ -1,4 +1,4 @@
-from flask import render_template , redirect ,request , flash,url_for
+from flask import render_template , redirect ,request , flash,url_for , session
 
 from src import app,db
 import sqlalchemy as sa
@@ -24,26 +24,29 @@ def login():
         if toggle:
             user1 = User(username = sform.username.data,
                         email = sform.email.data,
-                        FirstName=sform.username.data,
+                        FirstName=sform.firstname.data,
                         lastname=sform.lastname.data,
                         Gender=bool(sform.gender.data),
                         Birthdate=sform.birthdate.data,
                         FamilyID=sform.family_id.data,
                         FamilyRole=0,
                         bio="edit your bio",
-                        photo="temp")
+                        photo="https://www.pngall.com/wp-content/uploads/12/Avatar-No-Background.png")
             user1.set_password(sform.password.data)
             db.session.add(user1)
             db.session.commit()
+            login_user(user1)
+            print(current_user.is_authenticated)
             flash('Congratulations, you are now a registered user!')
-            return redirect(url_for('login'))
+            return redirect(url_for('feedPage' , username =current_user.username))
         
     
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first() # get the user first by email
-        if user and user.password_hash == form.password.data: # then check password ture or if the user not none
+        if user and user.check_password(form.password.data): # then check password ture or if the user not none
             login_user(user , remember=True)
-            return redirect(url_for('feedPage', username=user.username))
+            print(current_user.username)
+            return redirect(url_for('feedPage', username=current_user.username))
         else:
             flash('Invalid username or password')
             return redirect(url_for('login'))
@@ -51,7 +54,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    logout_user()
+    logout_user() 
     return redirect(url_for('login'))
 
 
@@ -60,6 +63,7 @@ def logout():
 @login_required
 def user(username):
     if current_user.username != username and not request.referrer:
+        print()
         return redirect(url_for('logout'))
     user = db.first_or_404(sa.select(User).where(User.username == username)) #will trigger a 404 error if user not found in the db
     user_family = Family.query.filter_by(id = user.FamilyID).first()
