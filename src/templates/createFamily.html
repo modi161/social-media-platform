@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Feed</title>
-    <link rel="stylesheet" href="createFamily.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='createFamily.css' ) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
@@ -19,21 +19,26 @@
             <div class ="family_photo">
                 <div class ="family_cover_img" id="family-cover-photo">
                     <img id="selected-cover-img" src ="https://www.unitelegalservices.org/media/1057/family_members.jpg">    
-                    <input type="file" id="family-cover-input" style="display:none;" accept="image/*">
+                    {{createfam.family_cover_input()}}
+                    {#<input type="file" id="family-cover-input" style="display:none;" accept="image/*">#}
                 </div> 
                 
                 <div class="profile_img" id="family-profile-photo"> 
                     <img id="selected-profile-img" src ="https://www.shutterstock.com/image-photo/father-girl-selfie-portrait-peace-260nw-2348830813.jpg">
-                    <input type="file" id="family-profile-input" style="display:none;" accept="image/*">
+                    {{createfam.family_profile_input()}}
+                    {#<input type="file" id="family-profile-input" style="display:none;" accept="image/*">#}
                 </div>   
+            </div>
         </div>
         
         <div class="family-info">
         <div> 
-            <input type="text"class ="family_name" id="family-name" placeholder="Family Name">
+            {{createfam.familyname()}}
+            {#<input type="text" class="family_name" id="family-name" placeholder="Family Name">#}
         </div>
         <div> 
-            <input class ="family_bio" type="text" id="family-bio" placeholder="what is the best thing in you as a family?">
+            {{createfam.bio()}}
+            {#<input class ="family_bio" type="text" id="family-bio" placeholder="what is the best thing in you as a family?">#}
         </div>
     </div>
             
@@ -49,7 +54,8 @@
 
                 <!-- Feed -->
                 <div class="feeds">
-                <label class="btn btn-primary" id="submit-button" type="submit">Create Family</label>
+                    {{createfam.createfam()}}
+                    <label class="btn btn-primary" id="submit-button" type="submit">Create Family</label>
                 </div>
                 <!-- end Feed -->
             <!--end of middle-->
@@ -63,7 +69,8 @@
 
 
     </main>
-    <script src="createFamily.js"></script>
+    <script src="{{ url_for('static', filename='createFamily.js' ) }}"></script>
+    
 </body>
 
 </html>

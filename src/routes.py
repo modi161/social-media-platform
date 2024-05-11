@@ -7,7 +7,7 @@ import sqlalchemy as sa
 import time
 from sqlalchemy import desc
 
-from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm
+from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm , CreateFamilyForm
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
 
@@ -287,3 +287,7 @@ def family_page(family_id):
 
     
     
+@app.route('/temp')
+def temp():
+    createfam = CreateFamilyForm()
+    return render_template('createFamily.html',createfam=createfam)

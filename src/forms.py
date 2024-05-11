@@ -69,7 +69,23 @@ class DeleteContentForm(FlaskForm):
 
     
     
-
+class CreateFamilyForm(FlaskForm):
+    familyname = StringField('Family Name', id='family-name', render_kw={"class": "family_name","placeholder": "Family Name"}, 
+                              validators=[DataRequired()], description="Family Name")
+    bio = StringField('bio', validators=[DataRequired()],
+                      id='family-bio',
+                      render_kw={"placeholder": "what is the best thing in you as a family?","class": "family_bio"})
+    
+    family_profile_input = FileField('family_profile_input',
+                                     validators=[FileAllowed(['jpg', 'png'], 'Images only!')],
+                                     id = 'family-profile-input')
+    
+    family_cover_input = FileField('family_cover_input',
+                                   validators=[FileAllowed(['jpg', 'png'], 'Images only!')],
+                                   id='family-cover-input')
+    
+    createfam = SubmitField('Create Family')
+    
 
 
 
