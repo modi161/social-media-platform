@@ -124,7 +124,9 @@
                             {% endif %}
                         </div>
                             <div class="photo">
-                                <img src="{{photo.photoUrl}}" alt="error">
+                                <img  src="{{photo.photoUrl}}" alt="error">
+
+                               
                             </div>
                             <div class="action-button">
                                 <div class="interaction-buttons">
@@ -148,9 +150,22 @@
 
                     <div id="delete-post-modal" class="modal">
                         <div class="modal-content">
-                            <p>Are you sure you want to delete the post?</p>
-                            <a href="#" id="confirm-delete" class="confirm-btn">Confirm</a>
-                            <a id="cancel-delete" class ="cancel-btn">Cancel</a>
+                            <form method = "POST">
+                                {{deleteForm.hidden_tag()}}
+
+                                <p>Are you sure you want to delete the post?</p>
+                                {{deleteForm.submit(id="confirm-delete", class="confirm-btn", value = "Confirm") }}
+
+                                <a id="cancel-delete" class ="cancel-btn">Cancel</a>
+
+                                {{deleteForm.contentID(type = "hidden", class="To-Delete-Content") }}
+
+                            </form>
+
+
+
+
+
                         </div>
                     </div>
                     {% endfor %}
@@ -236,14 +251,15 @@
         deletePostBtns.forEach(function(deletePostBtn) {
             deletePostBtn.addEventListener('click', function () {
                 contentID = deletePostBtn.getAttribute('data-content-id');
+                var deleteBtn = document.querySelector('.To-Delete-Content')
+                
+                deleteBtn.setAttribute('value', contentID);
+
+
                 modal.style.display = 'block';
             });
         });
     
-        confirmBtn.addEventListener('click', function () {
-            window.location.href = 'DeletePost/' + contentID;
-
-        });
     
         cancelBtn.addEventListener('click', function () {
             modal.style.display = 'none';

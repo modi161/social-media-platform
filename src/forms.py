@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField , DateField , RadioField
 from wtforms.validators import DataRequired ,Email , EqualTo , ValidationError
 from flask_wtf.file import FileField, FileAllowed
@@ -46,6 +47,20 @@ class Signupform(FlaskForm):
             User.email == email.data))
         if user is not None:
             raise ValidationError('Please use a different email address.')
+    
+class ContentForm(FlaskForm):
+    description = StringField('Description', validators=[DataRequired()], render_kw={"placeholder": "What is on your mind"})
+    visibility =  IntegerField("Visibility",validators=[DataRequired()])
+    type =  IntegerField("Type", validators=[DataRequired()])
+    userID =  IntegerField("Type", validators=[DataRequired()])
+    postImage = FileField("Image")  
+    albumImage = FileField("Image")  
+    submit = SubmitField("Submit")
+    
+class DeleteContentForm(FlaskForm):
+    contentID =  IntegerField("Type", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
     
     
 

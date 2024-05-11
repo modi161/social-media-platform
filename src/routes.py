@@ -1,13 +1,20 @@
-from flask import render_template , redirect ,request , flash,url_for , session
+
+from flask import render_template , redirect ,request , flash,url_for, jsonify , session
+
 
 from src import app,db
 import sqlalchemy as sa
+import time
+from sqlalchemy import desc
 
-
-from src.forms import Editform , Loginform , Signupform
+from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm
 from src.models import User
-from src.models import Content, ContentPhotos, Family, FamilyFollowing
+from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
+
 from flask_login import current_user,login_user,login_required,logout_user
+import os
+
+
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
@@ -78,22 +85,111 @@ def feedPage(username):
         return redirect(url_for('logout'))
     user = db.first_or_404(sa.select(User).where(User.username == username))
     family_id = user.FamilyID
-
-    if request.method == 'POST':
-        additional_data = request.form['additional_data']
-        newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
-        db.session.add(newFollowing)
-        db.session.commit()
     
-    # show families to be followed
+    form  = ContentForm()
+    #When submit form, it will create object from Content including the submitted data.
+    if form.validate_on_submit():
+        content = Content(description = form.description.data, visibility = form.visibility.data, userId = form.userID.data, Type = form.type.data)
+        
+        db.session.add(content)
+        db.session.commit()
+        
+        contentID = Content.query.order_by(desc(Content.timestamp)).first().id
+        
+        contentPhotos = ContentPhotos(contentId = contentID) #How to get above content id?
+        print("Content ID:")
+        print(contentID)
+        
+        if content.Type == 1:
+            image = form.postImage.data
+            print(image)
+            if image:
+                filename = f"{contentID}-{image.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                image.save(image_path)
+                
+                
+                image_path = f"../static/images/{filename}"
+                contentPhotos.photoUrl = image_path 
+                
+                print(image_path)
+                
+                
+        else:
+            image = form.albumImage.data
+            if image:
+                filename = f"{contentID}-{image.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                image.save(image_path)
+                
+                image_path = f"../static/images/{filename}"
+                contentPhotos.photoUrl = image_path 
+                
+                print(image_path)
+                
+        db.session.add(contentPhotos)
+        db.session.commit()
+
+
+
+        
+
+        #Clear everything (TO DO)
+        form.description.data = None #to clear the form after adding post
+        form.type.data = None
+        form.visibility.data = None
+        form.postImage.data = None
+        
+
+        
+        #flash message
+        
+        #return same page, SHOULD I RETURN IT? or when click on add it will call this function and by default it will return to the page at the end
+    
+        
+        
+    
+        
+        
+    
+    
+    
+    
+    
+    
+
+    #Like and Unlike part: (RASHAAAAAD Go and eat Fatosh!!!!!)
+    # if request.method == 'POST':
+    #     post_id = request.form.get('like') or request.form.get('unlike')
+    #     action = 'like' if request.form.get('like') else 'unlike'
+    #     if 'follow' in request.form:
+    #         additional_data = request.form['additional_data']
+    #         newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  additional_data)
+    #         db.session.add(newFollowing)
+    #         db.session.commit()
+    #     elif action == 'like':
+    #         print("IM HERE")
+    #         time.sleep(1)
+    #         contentID = request.form['like']
+    #         newLike = UserLikedContent(UserId = user.id, ContentId = post_id)
+    #         db.session.add(newLike)
+    #         db.session.commit()
+    #     elif action == 'unlike':
+    #         print("IM THERE")
+    #         time.sleep(1)
+    #         contentID = request.form['unlike']
+    #         entry_to_delete = db.session.query(UserLikedContent).filter(UserLikedContent.ContentId == post_id, UserLikedContent.UserId == user.id).first()
+    #         db.session.delete(entry_to_delete)
+    #         db.session.commit()
+
+
+        # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
     alredy_followed_families = []
     for family in alredy_followed:
         alredy_followed_families.append(family.FollowedFamilyId)
 
-    print(alredy_followed_families)
-    
-    print(alredy_followed)
+
     families = Family.query.filter(Family.id != family_id).all()
 
     TableOfContent = db.session.query(Family, FamilyFollowing, User, Content, ContentPhotos).\
@@ -104,13 +200,22 @@ def feedPage(username):
     
     families_filtered = [row for row in families if row.id not in alredy_followed_families]
     
+    print(families_filtered)
+
     posts = [row for row in TableOfContent if row[0].id == family_id]
-    
+    # print(posts)
 
 
-    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered)
+    # Liked content
 
-    #User=user, Disp=DispContent, 
+    LikedContent = UserLikedContent.query.filter(UserLikedContent.UserId == user.id).all()
+    alredy_liked = []
+    for liked in LikedContent:
+        alredy_liked.append(liked.ContentId)
+    print(alredy_liked)
+    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = alredy_liked, form = form)
+
+#User=user, Disp=DispContent, 
 
 #post it to the backend
 
@@ -119,6 +224,25 @@ def feedPage(username):
 @app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
 @login_required
 def family_page(family_id):
+    
+    deleteForm  = DeleteContentForm()
+    
+    if deleteForm.validate_on_submit():        
+        contentId = deleteForm.contentID.data
+        content = Content.query.get(contentId)
+
+        
+        photos = ContentPhotos.query.filter_by(contentId=contentId).all()
+        
+        #Delete row from the database, first photos then content
+        for photo in photos:
+            db.session.delete(photo)
+            db.session.commit()
+
+        db.session.delete(content)
+        db.session.commit()
+    
+    
     if current_user.FamilyID != family_id and not request.referrer:
         return redirect(url_for('logout'))
     user_family = Family.query.filter_by(id = family_id).first()
@@ -159,31 +283,7 @@ def family_page(family_id):
     
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
-    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members)
+    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm)
 
-    
-
-@app.route('/familypage/DeletePost/<int:content_id>')
-@login_required
-def family_page_delete_content(content_id):
-    
-    photos = ContentPhotos.query.filter_by(contentId=content_id).all()
-    content = Content.query.get(content_id)
-    user_id = getattr(content, "userId")
-    
-    user = User.query.get(user_id)
-    family_id = getattr(user, "FamilyID")
-    
-    #Delete row from the database, first photos then content
-    for photo in photos:
-        db.session.delete(photo)
-        db.session.commit()
-
-        
-        
-    db.session.delete(content)
-    db.session.commit()
-        
-    return family_page(family_id)
     
     

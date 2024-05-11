@@ -2,6 +2,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const dropdownSelect = document.querySelector('.dropdown-select');
     const dropdownList = document.querySelector('.dropdown-list');
     const selectedIcon = document.getElementById('selectedIcon');
+    const postImageInput = document.querySelector('.post-images');
+    const albumImageInput = document.querySelector('.album-images');
+    const addPostType = document.querySelector('.add-post-type');
+
+
+
+    // To determine the post type
+
+postImageInput.addEventListener('click', function() {
+
+    addPostType.setAttribute('value', 1);
+
+
+});
+
+
+albumImageInput.addEventListener('click', function() {
+    addPostType.setAttribute('value', 2);
+
+});
 
     // Toggle dropdown list
     dropdownSelect.addEventListener('click', function () {
@@ -14,8 +34,20 @@ document.addEventListener('DOMContentLoaded', function () {
             // Get the class from the span within the clicked item
             const iconClass = item.querySelector('span').className;
 
-            // Update the selected icon
+            // Get the post type
+            const postVisibility = item.querySelector('span').getAttribute('data-post-type');
+
+            // Update the selected icon class and type
             selectedIcon.className = iconClass;
+
+            selectedIcon.setAttribute('data-post-type', postVisibility);
+
+            //Add the post type to hidden input
+            const inputType = document.querySelector('.add-post-visibility')
+            inputType.setAttribute('value', postVisibility);
+
+
+
 
             // Close the dropdown list
             dropdownList.style.display = 'none';
@@ -94,3 +126,37 @@ document.querySelector('.charm--image').addEventListener('click', function() {
 document.querySelector('.solar--album-bold').addEventListener('click', function() {
     document.getElementById('album-images').click();
 });
+
+
+
+$(document).ready(function() {
+    // Add event listener to like/unlike buttons
+    $('.like-unlike-button').click(function(event) {
+        event.preventDefault(); // Prevent default form submission behavior
+        event.stopPropagation(); // Prevent event propagation
+
+        var $form = $(this).closest('.action');
+        var postId = $form.data('post-id');
+        var action = $form.data('action');
+        var username = "{{ username }}"; // Replace with the actual username
+
+        // Send AJAX request to the server
+        $.ajax({
+            url: '/feedpage/' + username,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ post_id: postId, action: action }),
+            success: function(response) {
+                console.log(response.message);
+                // Optionally update UI based on response
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+
+
+
+
