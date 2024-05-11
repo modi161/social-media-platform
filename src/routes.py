@@ -13,14 +13,35 @@ from flask_login import current_user,login_user,login_required,logout_user
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = Loginform()
-    if request.method == 'POST':
-        print(form.data)  # Check what data is actually being submitted
+
     sform = Signupform()
     if current_user.is_authenticated:
         return redirect(url_for('feedPage', username=current_user.username))
+    
+    if sform.validate_on_submit():
+        print("i entered the sign up")
+        toggle = sform.toggle.data
+        if toggle:
+            user1 = User(username = sform.username.data,
+                        email = sform.email.data,
+                        FirstName=sform.username.data,
+                        lastname=sform.lastname.data,
+                        Gender=bool(sform.gender.data),
+                        Birthdate=sform.birthdate.data,
+                        FamilyID=sform.family_id.data,
+                        FamilyRole=0,
+                        bio="edit your bio",
+                        photo="temp")
+            user1.set_password(sform.password.data)
+            db.session.add(user1)
+            db.session.commit()
+            flash('Congratulations, you are now a registered user!')
+            return redirect(url_for('login'))
+        
+    
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.password_hash == form.password.data:
+        user = User.query.filter_by(email=form.email.data).first() # get the user first by email
+        if user and user.password_hash == form.password.data: # then check password ture or if the user not none
             login_user(user , remember=True)
             return redirect(url_for('feedPage', username=user.username))
         else:
