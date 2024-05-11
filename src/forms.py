@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField , DateField , RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField , DateField , RadioField ,IntegerField
 from wtforms.validators import DataRequired ,Email , EqualTo , ValidationError
 from flask_wtf.file import FileField, FileAllowed
 from src import db
 import sqlalchemy as sa
-from src.models import User
+from src.models import User,Family
 
 class Editform(FlaskForm):
     bio = TextAreaField('Bio')
@@ -47,6 +47,12 @@ class Signupform(FlaskForm):
             User.email == email.data))
         if user is not None:
             raise ValidationError('Please use a different email address.')
+        
+    def validate_family_id(self, family_id):
+        family = db.session.scalar(sa.select(Family).where(
+            Family.id == family_id.data))
+        if family_id is not None:
+            raise ValidationError('There is no family with this id')
     
 class ContentForm(FlaskForm):
     description = StringField('Description', validators=[DataRequired()], render_kw={"placeholder": "What is on your mind"})

@@ -25,7 +25,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('feedPage', username=current_user.username))
     
-    if sform.validate_on_submit():
+    if sform.validate_on_submit() and sform.submit_signup.data:
         print("i entered the sign up")
         toggle = sform.toggle.data
         if toggle:
@@ -48,7 +48,7 @@ def login():
             return redirect(url_for('feedPage' , username =current_user.username))
         
     
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.log.data:
         user = User.query.filter_by(email=form.email.data).first() # get the user first by email
         if user and user.check_password(form.password.data): # then check password ture or if the user not none
             login_user(user , remember=True)
