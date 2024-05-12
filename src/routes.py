@@ -7,7 +7,8 @@ import sqlalchemy as sa
 import time
 from sqlalchemy import desc
 
-from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, LikeForm, UnlikeForm, UnfollowForm
+from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, LikeForm, UnlikeForm, UnfollowForm , CreateFamilyForm
+
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
 
@@ -20,35 +21,40 @@ import os
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = Loginform()
-
+    
     sform = Signupform()
     if current_user.is_authenticated:
         return redirect(url_for('feedPage', username=current_user.username))
     
-    if sform.validate_on_submit():
-        print("i entered the sign up")
+    
+    if sform.validate_on_submit() and sform.submit_signup.data:
+        
         toggle = sform.toggle.data
-        if toggle:
-            user1 = User(username = sform.username.data,
+        user1 = User(username = sform.username.data,
                         email = sform.email.data,
                         FirstName=sform.firstname.data,
                         lastname=sform.lastname.data,
                         Gender=bool(sform.gender.data),
                         Birthdate=sform.birthdate.data,
-                        FamilyID=sform.family_id.data,
                         FamilyRole=0,
                         bio="edit your bio",
                         photo="https://www.pngall.com/wp-content/uploads/12/Avatar-No-Background.png")
-            user1.set_password(sform.password.data)
+        user1.set_password(sform.password.data)
+        if toggle:
+            user1.set_FamilyID(sform.family_id.data)
             db.session.add(user1)
             db.session.commit()
             login_user(user1)
             print(current_user.is_authenticated)
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('feedPage' , username =current_user.username))
+        else:
+            session['user1'] = user1.to_dict()
+            return redirect(url_for('create_family'))
         
     
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.log.data:
+        print('enter login form')
         user = User.query.filter_by(email=form.email.data).first() # get the user first by email
         if user and user.check_password(form.password.data): # then check password ture or if the user not none
             login_user(user , remember=True)
@@ -58,6 +64,45 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
     return render_template('index.html', form=form , sform = sform, currentuser = current_user)
+
+@app.route('/create_family',methods=['GET', 'POST'])
+def create_family():
+    createfam = CreateFamilyForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('feedPage', username=current_user.username))
+    
+    print(createfam.validate_on_submit())
+    print(createfam.createfam.data)
+    if createfam.validate_on_submit() and createfam.createfam.data:
+        print('entered create family from')
+        user1 = session.get('user1') #get the signed up user from seesion
+        new_family = Family(familyname = createfam.familyname.data ,
+                        bio=createfam.bio.data,
+                        coverphoto=createfam.family_cover_input.data,
+                        profilephoto=createfam.family_profile_input.data)
+        db.session.add(new_family)
+        db.session.commit()
+        print('family created and added to database')
+        new_user = User(username = user1.get('username'),
+                        email = user1.get('email'),
+                        FirstName=user1.get('FirstName'),
+                        lastname=user1.get('lastname'),
+                        Gender=bool(user1.get('Gender')),
+                        Birthdate=user1.get('Birthdate'),
+                        FamilyRole=1,
+                        password_hash = user1.get('password_hash'),
+                        bio="edit your bio",
+                        photo="https://www.pngall.com/wp-content/uploads/12/Avatar-No-Background.png")
+        new_user.set_FamilyID(new_family.id)
+        db.session.add(new_user)
+        db.session.commit()
+        print('user created and added to database')
+        login_user(new_user)
+        print('user logedin')
+        return redirect(url_for('family_page', family_id=current_user.FamilyID))
+    return render_template('createFamily.html' ,createfam=createfam)
+
+
 
 @app.route('/logout')
 def logout():

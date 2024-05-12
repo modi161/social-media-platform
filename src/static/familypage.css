@@ -851,3 +851,11 @@ max-width: 400px;
 .modal .modal-content span{
   cursor: pointer;
 }
+
+#family-profile-input {
+  display: none;
+}
+
+#family-cover-input {
+  display: none;
+}
