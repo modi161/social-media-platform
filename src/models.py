@@ -67,6 +67,24 @@ class User(db.Model,UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
+    def set_FamilyID(self,famid):
+        self.FamilyID = famid
+        
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'FirstName': self.FirstName,
+            'email': self.email,
+            'lastname': self.lastname,
+            'Gender': self.Gender,
+            'Birthdate': self.Birthdate.isoformat(),  # Convert date to ISO format
+            'FamilyRole': self.FamilyRole,
+            'bio': self.bio,
+            'photo': self.photo,
+            'password_hash' : self.password_hash
+        }    
+    
+    
 @login.user_loader
 def load_user(id):
     return db.session.get(User, int(id))

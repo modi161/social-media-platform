@@ -48,11 +48,11 @@ class Signupform(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
         
-    def validate_family_id(self, family_id):
-        family = db.session.scalar(sa.select(Family).where(
-            Family.id == family_id.data))
-        if family_id is not None:
-            raise ValidationError('There is no family with this id')
+    # def validate_family_id(self, family_id):
+    #     family = db.session.scalar(sa.select(Family).where(
+    #         Family.id == family_id.data))
+    #     if family is not None:
+    #         raise ValidationError('There is no family with this id')
     
 class ContentForm(FlaskForm):
     description = StringField('Description', validators=[DataRequired()], render_kw={"placeholder": "What is on your mind"})
