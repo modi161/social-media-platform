@@ -11,6 +11,7 @@ from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteCont
 
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
+from sqlalchemy.orm import aliased
 
 from flask_login import current_user,login_user,login_required,logout_user
 import os
@@ -230,17 +231,24 @@ def feedPage(username):
 
     families = Family.query.filter(Family.id != family_id).all()
 
-    TableOfContent = db.session.query(Family, FamilyFollowing, User, Content, ContentPhotos).\
+
+    
+    FamilyAlias = aliased(Family)
+
+
+
+    TableOfContent = db.session.query(Family, FamilyFollowing, User, Content, ContentPhotos, FamilyAlias).\
         join(FamilyFollowing, Family.id == FamilyFollowing.FollowingFamilyId).\
         join(User, User.FamilyID == FamilyFollowing.FollowedFamilyId).\
         join(Content, User.id == Content.userId).\
+        join(FamilyAlias, FamilyAlias.id == FamilyFollowing.FollowedFamilyId).\
         join(ContentPhotos, Content.id == ContentPhotos.contentId).all()
     
     families_filtered = [row for row in families if row.id not in alredy_followed_families]
     
 
     posts = [row for row in TableOfContent if row[0].id == family_id]
-
+    
 
     # Liked content
 
