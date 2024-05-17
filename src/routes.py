@@ -238,8 +238,7 @@ def feedPage(username):
     TableOfContent = db.session.query(Family, FamilyFollowing, User, Content, ContentPhotos, FamilyAlias).\
         join(FamilyFollowing, Family.id == FamilyFollowing.FollowingFamilyId).\
         join(User, User.FamilyID == FamilyFollowing.FollowedFamilyId).\
-        join(Content, User.id == Content.userId).\
-        join(FamilyAlias, FamilyAlias.id == FamilyFollowing.FollowedFamilyId).\
+        join(Content, User.id == Content.userId)
 
     
 
@@ -261,6 +260,7 @@ def feedPage(username):
         user_alias,
         content_alias,
         content_photos_alias,
+        FamilyAlias,
         sa.func.coalesce(like_count_subquery.c.like_count, 0).label('like_count')
     ).join(
         family_following_alias, family_alias.id == family_following_alias.FollowingFamilyId
@@ -274,6 +274,8 @@ def feedPage(username):
         content_photos_alias, content_alias.id == content_photos_alias.contentId
     ).outerjoin(
         like_count_subquery, like_count_subquery.c.ContentId == content_alias.id
+    ).join(
+        FamilyAlias, FamilyAlias.id == family_following_alias.FollowedFamilyId
     )
 
     results = query.all()
