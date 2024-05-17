@@ -72,9 +72,9 @@
             </div>
             <div class="create">
                 <label for="create-post" class="btn btn-primary">Create</label>
-                <div class="profile-photo">
+                <!-- <div class="profile-photo">
                     <img src="./images/profile1.png">
-                </div>
+                </div>  -->
             </div>
         </div>
     </nav>
@@ -160,7 +160,7 @@
                     {{form.hidden_tag()}}
 
                     <div class="profile-photo">
-                        <img src="{{url_for('static', filename='./images/profile1.png')}}">
+                        <img  src="{{User.photo}}">
                     </div>
 
                     {{  form.description(id="create-post")
@@ -207,7 +207,7 @@
                         <div class="head">
                             <div class="user">
                                 <div class="profile-photo">
-                                    <img src="{{url_for('static', filename='./images/profile2.png')}}">
+                                    <img src="{{post[5].profilephoto}}">
                                 </div>
                                 <div class="info">
                                     <h3>{{ post[2].username }}</h3>
@@ -252,7 +252,8 @@
                         <div class="head">
                             <div class="user">
                                 <div class="profile-photo">
-                                    <img src="{{url_for('static', filename='./images/profile2.png')}}">
+                                    <img src="{{post[5].profilephoto}}">
+                                    <h1>{{post[0].familyname}}</h1>
                                 </div>
                                 <div class="info">
                                     <h3>{{ post[2].username }}</h3>
