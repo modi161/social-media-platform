@@ -1,7 +1,9 @@
 # Social Media Platform
 
-## To install the project:
+Reunion is a calm and warm place for documenting families’ memories, achievements, and important dates. Families can follow each other. Active families will inspire other families to connect more, engage in new activities, and feel gratitude for having each other.
 
+
+## Setting up the project:
 1. Create a virtual environment:
     ```bash
     python3 -m venv venv
@@ -28,17 +30,43 @@
     flask run
     ```
 
-
-
-
-
-# social-media-platform
-Welcome to FamilyConnect, a social networking platform designed to foster communication and connections among families. Whether you're spread across the globe or just down the street, FamilyConnect provides a centralized hub for sharing moments, organizing events, and staying connected with your loved ones.
-
-We will use jira for the scrum and its setup is shown as following: 
-
-We used the scrum template and the current status is as following
-![image](https://github.com/Rashaddd003/social-media-platform/assets/119047399/538e68ac-ae8f-45fc-9248-796c1c59d566)
-
-
+##Contact the developers 
+<table>
+  <tbody>
+        <tr>
+        <td align="center">
+            <a href="https://github.com/modi161">
+                <img src="https://avatars.githubusercontent.com/u/65646207?v=4" width="100px;" alt="Mohamed Elsayed"/>
+                <br />
+                <sub><b>Mohamed Elsayed</b></sub>
+            </a>
+            <br />
+        </td>
+        <td align="center">
+            <a href="https://github.com/tarek1488">
+                <img src="https://avatars.githubusercontent.com/u/105943642?v=4" width="100px;" alt="Tarek Ashraf"/>
+                <br />
+                <sub><b>Tarek Ashraf</b></sub>
+            </a>
+            <br />
+        </td>
+        <td align="center">
+            <a href="https://github.com/Rashaddd003">
+                <img src="https://avatars.githubusercontent.com/u/119047399?v=4" width="100px;" alt="Abdelrahman Rashad"/>
+                <br />
+                <sub><b>Abdelrahman Rashad</b></sub>
+            </a>
+            <br />
+        </td>
+        <td align="center">
+            <a href="https://github.com/besology512">
+                <img src="https://avatars.githubusercontent.com/u/55919957?v=4" width="100px;" alt="Ahmed Bassam"/>
+                <br />
+                <sub><b>Ahmed Bassam</b></sub>
+            </a>
+            <br />
+        </td>
+        </tr>
+    </tbody>
+</table>
 
