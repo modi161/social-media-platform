@@ -23,14 +23,14 @@ Reunion is a calm and warm place for documenting families’ memories, achieveme
     ```
 4. Specify the Flask app:
     ```bash
-    export FLASK_APP=microblog.py
+    export FLASK_APP=social_media.py
     ```
 5. Run the app!:
     ```bash
     flask run
     ```
 
-##Contact the developers 
+## Contact the developers 
 <table>
   <tbody>
         <tr>
