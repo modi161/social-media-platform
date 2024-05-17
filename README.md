@@ -1,21 +1,39 @@
-﻿# social-media-platform
-To install the project:
+# Social Media Platform
+
+## To install the project:
+
 1. Create a virtual environment:
-     python3 -m venv venv
+    ```bash
+    python3 -m venv venv
+    ```
 2. Activate the virtual environment:
-     venv/Scripts/Activate
-3. Install flask:
-     pip install flask
-4. Install Packages:
-    pip install -r requirement.txt
-5. Specify the Flask App:
-   export FLASK_APP=microblog.py
+    - On Windows:
+      ```bash
+      venv\Scripts\Activate
+      ```
+    - On macOS and Linux:
+      ```bash
+      source venv/bin/activate
+      ```
+3. Install Flask:
+    ```bash
+    pip install flask
+    ```
+4. Install packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
+5. Specify the Flask app:
+    ```bash
+    export FLASK_APP=microblog.py
+    ```
 6. Run the app!:
-   flask run
+    ```bash
+    flask run
+    ```
 
-   
 
-app = src
+
 
 
 # social-media-platform
