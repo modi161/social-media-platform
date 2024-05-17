@@ -42,7 +42,7 @@ jobs:
       with:
         login-server: ${{ secrets.AZURE_ACR_LOGIN_SERVER }}
         username: ${{ secrets.AZURE_ACR_NAME }}
-        password: ${{ secrets.AZURE_ACR_PASSWORD }}
+        
 
     - name: Build Docker Image
       run: |
