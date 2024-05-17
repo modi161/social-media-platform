@@ -50,4 +50,4 @@ jobs:
         
     - name: Push Docker Image to Azure Container Registry
       run: |
-        docker push reuinionregistry.azurecr.io/reunion
+        docker push reuinionregistry.azurecr.io/reunion:latest
