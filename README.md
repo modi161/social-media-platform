@@ -15,19 +15,15 @@
       ```bash
       source venv/bin/activate
       ```
-3. Install Flask:
-    ```bash
-    pip install flask
-    ```
-4. Install packages:
+3. Install packages:
     ```bash
     pip install -r requirements.txt
     ```
-5. Specify the Flask app:
+4. Specify the Flask app:
     ```bash
     export FLASK_APP=microblog.py
     ```
-6. Run the app!:
+5. Run the app!:
     ```bash
     flask run
     ```
