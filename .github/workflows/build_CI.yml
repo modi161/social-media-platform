@@ -44,7 +44,7 @@ jobs:
         password: l1BAfg0tWENlHYjvw8vdo0Hu7nArzXmFOJgSDTe4+Q+ACRAKoME+
         
 
-    - name: Build and Push to ACR
+    - name: Build and Push too ACR
       uses: docker/build-push-action@v2
       with:
         push: true
