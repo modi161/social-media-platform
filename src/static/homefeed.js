@@ -19,7 +19,7 @@ postImageInput.addEventListener('click', function() {
 
 
 albumImageInput.addEventListener('click', function() {
-    addPostType.setAttribute('value', 2);
+    addPostType.setAttribute('value', 0);
 
 });
 

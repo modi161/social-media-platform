@@ -135,8 +135,9 @@ def feedPage(username):
     followingform = FollowForm()
     likeForm = LikeForm()
     Unlikeform = UnlikeForm()
+    
     #When submit form, it will create object from Content including the submitted data.
-    if form.validate_on_submit() and form.submit.data:
+    if form.submit.data:
         content = Content(description = form.description.data, visibility = form.visibility.data, userId = form.userID.data, Type = form.type.data)
         
         db.session.add(content)
