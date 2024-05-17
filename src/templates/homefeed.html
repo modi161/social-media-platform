@@ -9,6 +9,58 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(document).on('click', '.ph--heart', function(event){
+            event.preventDefault();
+            var button = $(this);
+            var postId = button.data('post-id');
+            var form = button.closest('form');
+            
+            $.ajax({
+                type: 'POST',
+                url: '/like_post',
+                data: form.serialize(),
+                success: function(response){
+                    if (response.status === 'liked') {
+                        button.removeClass('ph--heart').addClass('ph--heart-liked');
+                    } else {
+                        alert("Failed to like post.");
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error("Error occurred:", error);
+                    alert("Error occurred while liking the post.");
+                }
+            });
+        });
+
+        $(document).on('click', '.ph--heart-liked', function(event){
+            event.preventDefault();
+            var button = $(this);
+            var postId = button.data('post-id');
+            var form = button.closest('form');
+            
+            $.ajax({
+                type: 'POST',
+                url: '/unlike_post',
+                data: form.serialize(),
+                success: function(response){
+                    if (response.status === 'unliked') {
+                        button.removeClass('ph--heart-liked').addClass('ph--heart');
+                    } else {
+                        alert("Failed to unlike post.");
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error("Error occurred:", error);
+                    alert("Error occurred while unliking the post.");
+                }
+            });
+        });
+    });
+</script>
 </head>
 <body>
     <nav>
@@ -169,26 +221,21 @@
                             <div class="action-button">
                                 <div class="interaction-buttons">
                                     {% if post[3].id in Liked %}
-                                        <form method="post">
-                                            {{ UnlinkingForm.hidden_tag() }}
-                                            {{ UnlinkingForm.ContentId(type = "hidden", value = post[3].id) }}
-                                            {{ UnlinkingForm.submit2(class="ph--heart-liked") }}
+                                        <form class="unlike-form" method="POST">
+                                            <input type="hidden" name="name" id="name" value="{{ post[3].id }}">
+                                            <button type="button" class="ph--heart-liked" data-post-id="{{ post[3].id }}"></button>
                                         </form>
                                     {% else %}
-                                        <form method="post">
-                                            {{ LikingForm.hidden_tag() }}
-                                            {{ LikingForm.ContentId(type = "hidden", value = post[3].id) }}
-                                            {{ LikingForm.submit1(class="ph--heart") }}
-                                        </form>    
+                                        <form class="like-form" method="POST">
+                                            <input type="hidden" name="name" id="name" value="{{ post[3].id }}">
+                                            <button type="button" class="ph--heart" data-post-id="{{ post[3].id }}"></button>
+                                        </form>
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="liked-by">
                                 <span><img src="{{url_for('static', filename='./images/profile1.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile2.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile3.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile4.png')}}"></span>
-                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
+                                <p>Liked by <b>{{post[-1]}}</b> people</p>
                             </div>
                             <div class="caption">
                                 <p><b>{{ post[2].username }}</b> {{ post[3].description }}</p>
@@ -314,3 +361,4 @@
     <script src="{{url_for('static', filename='homefeed.js')}}"></script>
 </body>
 </html>
+
