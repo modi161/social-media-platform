@@ -67,19 +67,53 @@ def login():
 
 @app.route('/create_family',methods=['GET', 'POST'])
 def create_family():
+    
     createfam = CreateFamilyForm()
     if current_user.is_authenticated:
         return redirect(url_for('feedPage', username=current_user.username))
     
     print(createfam.validate_on_submit())
     print(createfam.createfam.data)
+            
     if createfam.validate_on_submit() and createfam.createfam.data:
         print('entered create family from')
         user1 = session.get('user1') #get the signed up user from seesion
-        new_family = Family(familyname = createfam.familyname.data ,
-                        bio=createfam.bio.data,
-                        coverphoto=createfam.family_cover_input.data,
-                        profilephoto=createfam.family_profile_input.data)
+        new_family = Family(familyname = createfam.familyname.data , bio=createfam.bio.data)
+        
+        
+        uniqueId = 900 #will be changed
+        
+        
+        profileImage = createfam.family_profile_input.data
+        coverImage = createfam.family_cover_input.data
+        
+        if profileImage:
+            filename = f"{uniqueId}-{profileImage.filename}"
+            image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+            profileImage.save(image_path)
+            
+            
+            image_path = f"../static/images/{filename}"
+            new_family.profilephoto = image_path
+            
+            
+        if coverImage:
+            filename = f"{uniqueId}-{coverImage.filename}"
+            image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+            coverImage.save(image_path)
+            
+            
+            image_path = f"../static/images/{filename}"
+            new_family.coverphoto = image_path
+                            
+                
+                
+                
+        
+        
+        
+        
+        
         db.session.add(new_family)
         db.session.commit()
         print('family created and added to database')

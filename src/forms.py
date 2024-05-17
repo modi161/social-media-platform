@@ -84,13 +84,9 @@ class CreateFamilyForm(FlaskForm):
                       id='family-bio',
                       render_kw={"placeholder": "what is the best thing in you as a family?","class": "family_bio"})
     
-    family_profile_input = FileField('family_profile_input',
-                                     validators=[FileAllowed(['jpg', 'png'], 'Images only!')],
-                                     id = 'family-profile-input')
+    family_profile_input = FileField('family_profile_input',   id = 'family-profile-input')
     
-    family_cover_input = FileField('family_cover_input',
-                                   validators=[FileAllowed(['jpg', 'png'], 'Images only!')],
-                                   id='family-cover-input')
+    family_cover_input = FileField('family_cover_input', id='family-cover-input')
     
     createfam = SubmitField('Create Family' ,id='submit-button' ,render_kw={"class": "btn btn-primary"})
     
