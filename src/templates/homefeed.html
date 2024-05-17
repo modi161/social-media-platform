@@ -270,29 +270,22 @@
                             <div class="action-button">
                                 <div class="interaction-buttons">
                                     {% if post[3].id in Liked %}
-                                        <form method="post">
-                                            {{ UnlinkingForm.hidden_tag() }}
-                                            {{ UnlinkingForm.ContentId(type = "hidden", value = post[3].id) }}
-                                            {{ UnlinkingForm.submit2(class="ph--heart-liked") }}
+                                        <form class="unlike-form" method="POST">
+                                            <input type="hidden" name="name" id="name" value="{{ post[3].id }}">
+                                            <button type="button" class="ph--heart-liked" data-post-id="{{ post[3].id }}"></button>
                                         </form>
                                     {% else %}
-                                        <form method="post">
-                                            {{ LikingForm.hidden_tag() }}
-                                            {{ LikingForm.ContentId(type = "hidden", value = post[3].id) }}
-                                            {{ LikingForm.submit1(class="ph--heart") }}
-                                        </form>    
+                                        <form class="like-form" method="POST">
+                                            <input type="hidden" name="name" id="name" value="{{ post[3].id }}">
+                                            <button type="button" class="ph--heart" data-post-id="{{ post[3].id }}"></button>
+                                        </form>
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="liked-by">
                                 <span><img src="{{url_for('static', filename='./images/profile1.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile2.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile3.png')}}"></span>
-                                <span><img src="{{url_for('static', filename='./images/profile4.png')}}"></span>
-                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
+                                <p>Liked by <b>{{post[-1]}}</b> people</p>
                             </div>
-
-                        
                     </div>
                     {% endif %}
 
