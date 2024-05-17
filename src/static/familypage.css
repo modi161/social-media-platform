@@ -475,12 +475,62 @@ border-radius: var(--border-radius);
     position:relative;
   }
 
+  .post-icons
+  {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .edit-post
+  {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    margin: 0 5px;
+  }
+
+  .edit-post svg path {
+
+    fill:#a5a0a0;
+  }
+
   .delete-post {
     cursor: pointer;
     height: 14px;
     width: 14px;
+    margin: 0 5px;
 
 }
+
+
+
+
+.edit-post-form{
+  width: 100%;
+
+  margin-top: 1rem;
+  background:var(--color-white);
+  border-radius: var(--border-radius);
+  }
+
+.edit-post-form-description
+  {
+    justify-self: start;
+    width: 100%;
+    background: #ffffff;
+    color: var(--color-dark);
+    margin-right: 1rem;
+    padding: 30px 20px;
+    box-shadow: azure;
+    border: 1px solid #a29a9a;
+    border-radius: 10px;
+  }
+  
+
+
+
+
+  
 
 .delete-post svg path {
 
@@ -830,7 +880,6 @@ max-width: 400px;
 }
 
 .modal .modal-content form{
-  margin: 20px;
   padding: 20px;
 }
 
@@ -838,6 +887,17 @@ max-width: 400px;
   border: 1px solid black;
   padding: 8px;
   margin-top: 5px;
+}
+
+.new-visibility-edit select
+{
+  font-size: 15px;
+}
+
+
+.new-visibility-edit
+{
+  margin-bottom: 10px;
 }
 
 .modal .modal-content input[type="submit"]{
@@ -851,6 +911,14 @@ max-width: 400px;
 .modal .modal-content span{
   cursor: pointer;
 }
+
+.modal .btns .btn-danger
+{
+    background-color: #b31616;
+    color: white;
+    border-radius: 10px;
+}
+
 
 #family-profile-input {
   display: none;

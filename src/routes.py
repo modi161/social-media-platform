@@ -7,7 +7,7 @@ import sqlalchemy as sa
 import time
 from sqlalchemy import desc
 
-from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, LikeForm, UnlikeForm, UnfollowForm , CreateFamilyForm
+from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, LikeForm, UnlikeForm, UnfollowForm , CreateFamilyForm, EditContentForm
 
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
@@ -136,7 +136,7 @@ def feedPage(username):
     likeForm = LikeForm()
     Unlikeform = UnlikeForm()
     #When submit form, it will create object from Content including the submitted data.
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.submit.data:
         content = Content(description = form.description.data, visibility = form.visibility.data, userId = form.userID.data, Type = form.type.data)
         
         db.session.add(content)
@@ -259,8 +259,10 @@ def feedPage(username):
 def family_page(family_id):
     
     deleteForm  = DeleteContentForm()
+    editContentForm = EditContentForm()
+
     
-    if deleteForm.validate_on_submit() and deleteForm.submit.data:        
+    if deleteForm.validate_on_submit() and deleteForm.submit.data:                
         contentId = deleteForm.contentID.data
         content = Content.query.get(contentId)
 
@@ -274,6 +276,7 @@ def family_page(family_id):
 
         db.session.delete(content)
         db.session.commit()
+        
     
     
     if current_user.FamilyID != family_id and not request.referrer:
@@ -293,6 +296,40 @@ def family_page(family_id):
         # This block only executes when the page first loads or if validation fails
         if user_family:
             form.bio.data = user_family.bio
+            
+            
+    if editContentForm.validate_on_submit() and editContentForm.submit2.data:
+        contentId = editContentForm.contentID.data
+        newDescription = editContentForm.description.data
+        newVisibility = editContentForm.visibility.data
+        newImage = editContentForm.image.data
+        
+        content = Content.query.get(contentId)
+        contentPhoto = ContentPhotos.query.filter_by(contentId=contentId).first()
+        
+        if content:
+            # Update the fields if they are not empty in the form
+            if editContentForm.description.data:
+                content.description = newDescription
+            if editContentForm.visibility.data:
+                content.visibility = bool(newVisibility)
+            if editContentForm.image.data:
+                filename = f"{contentId}-{newImage.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                newImage.save(image_path)
+                image_path = f"../static/images/{filename}"
+                contentPhoto.photoUrl = image_path
+
+            db.session.commit()  # Commit changes to the database
+        
+
+        editContentForm.description.data = None
+        editContentForm.image.data = None
+        
+        print(f"The new data\n\n {contentId}\n{newDescription}\n{newVisibility}\n{newImage}")
+        
+        
+        
     
     unfollow = UnfollowForm()
     if unfollow.validate_on_submit() and unfollow.submit3.data:
@@ -321,7 +358,7 @@ def family_page(family_id):
     
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
-    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm, Unfollow = unfollow)
+    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm, Unfollow = unfollow, editContentForm = editContentForm)
 
     
     

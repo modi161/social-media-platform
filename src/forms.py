@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField , DateField , RadioField ,IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField , DateField , RadioField ,IntegerField, SelectField
 from wtforms.validators import DataRequired ,Email , EqualTo , ValidationError
 from flask_wtf.file import FileField, FileAllowed
 from src import db
@@ -67,6 +67,13 @@ class DeleteContentForm(FlaskForm):
     contentID =  IntegerField("Type", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
+class EditContentForm(FlaskForm):
+    description = StringField('Description', validators=[DataRequired()])
+    contentID =  IntegerField("Type", validators=[DataRequired()])
+    # visibility =  IntegerField("Visibility",validators=[DataRequired()])
+    visibility = SelectField('Visibility', choices=[('1', 'Public'), ('0', 'Private')], validators=[DataRequired()])
+    image = FileField("Image")  
+    submit2 = SubmitField("Update")
 
     
     
