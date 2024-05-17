@@ -94,18 +94,8 @@ class CreateFamilyForm(FlaskForm):
 
 class FollowForm(FlaskForm):
     followedFamily = IntegerField("Followed", validators=[DataRequired()])
-    submit = SubmitField("Follow")
+    submit1 = SubmitField("Follow")
 
-
-
-class LikeForm(FlaskForm):
-    ContentId = IntegerField("Id", validators=[DataRequired()])
-    submit1 = SubmitField(" ")
-    
-
-class UnlikeForm(FlaskForm):
-    ContentId = IntegerField("Id", validators=[DataRequired()])
-    submit2 = SubmitField(" ")
     
     
 class UnfollowForm(FlaskForm):

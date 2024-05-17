@@ -8,7 +8,7 @@ import time
 from sqlalchemy import desc
 from sqlalchemy.orm import aliased
 
-from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, LikeForm, UnlikeForm, UnfollowForm , CreateFamilyForm, EditContentForm
+from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, UnfollowForm , CreateFamilyForm, EditContentForm
 
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
@@ -245,7 +245,7 @@ def feedPage(username):
     
 
 
-    if followingform.validate_on_submit() and followingform.submit.data:
+    if followingform.validate_on_submit() and followingform.submit1.data:
         newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  followingform.followedFamily.data)
         db.session.add(newFollowing)
         db.session.commit()
