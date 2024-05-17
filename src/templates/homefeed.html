@@ -200,7 +200,9 @@
                 <div class="feeds">
                     <!-- feed 1  -->
                     {% for post in Posts %}
-                    {% if post[3].visibility == 1 %}
+                    <!--post-->
+                    {% if post[3].visibility == 1 and post[3].Type == 1%}
+                    
                     <div class="feed">
                         <div class="head">
                             <div class="user">
@@ -242,6 +244,57 @@
                         
                     </div>
                     {% endif %}
+
+                    <!--album-->
+                    {% if post[3].visibility == 1 and post[3].Type == 0%}
+                    
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="profile-photo">
+                                    <img src="{{url_for('static', filename='./images/profile2.png')}}">
+                                </div>
+                                <div class="info">
+                                    <h3>{{ post[2].username }}</h3>
+                                    <small>{{ post[3].timestamp }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="album-caption">
+                            <h4> {{ post[3].description }} </h4>
+                        </div>
+                            <div class="photo album-photo">
+                                <img src="{{ post[4].photoUrl }}">
+                            </div>
+                            <div class="action-button">
+                                <div class="interaction-buttons">
+                                    {% if post[3].id in Liked %}
+                                        <form method="post">
+                                            {{ UnlinkingForm.hidden_tag() }}
+                                            {{ UnlinkingForm.ContentId(type = "hidden", value = post[3].id) }}
+                                            {{ UnlinkingForm.submit2(class="ph--heart-liked") }}
+                                        </form>
+                                    {% else %}
+                                        <form method="post">
+                                            {{ LikingForm.hidden_tag() }}
+                                            {{ LikingForm.ContentId(type = "hidden", value = post[3].id) }}
+                                            {{ LikingForm.submit1(class="ph--heart") }}
+                                        </form>    
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="liked-by">
+                                <span><img src="{{url_for('static', filename='./images/profile1.png')}}"></span>
+                                <span><img src="{{url_for('static', filename='./images/profile2.png')}}"></span>
+                                <span><img src="{{url_for('static', filename='./images/profile3.png')}}"></span>
+                                <span><img src="{{url_for('static', filename='./images/profile4.png')}}"></span>
+                                <p>Liked by <b>Abdelrahman Rashad</b> and <b>2,333 others</b></p>
+                            </div>
+
+                        
+                    </div>
+                    {% endif %}
+
                     {% endfor %}
                     <!-- feed 1 end  -->
                 </div>

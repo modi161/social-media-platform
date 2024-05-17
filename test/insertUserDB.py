@@ -22,9 +22,10 @@ sql = "INSERT INTO user (username, FirstName, email, password_hash, lastname, Ge
 # Example data to insert
 # Note: Modify the values accordingly. Ensure dates and other types are correctly formatted.
 data = (
-    "Alaaa",          # username
+
+    "Tarek",          # username
     "boody",             # FirstName
-    "Alaaa.rashad@teeztarek.com",  # email
+    "Tarek.rashad@teeztarek.com",  # email
     "1234",    # password_hash
     "tezzztarek",              # lastname
 
@@ -54,3 +55,7 @@ finally:
         my_cursor.close()
     if my_db:
         my_db.close()
+
+
+#Batman123@gmail.com 123
+#Superman 123

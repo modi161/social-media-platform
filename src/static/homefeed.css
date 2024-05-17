@@ -436,6 +436,17 @@ border-radius: var(--border-radius);
     margin: 0.7rem 0;
   }
 
+  .middle .feed .album-photo
+  {
+    border: 3px solid #b3a8aa;
+  }
+
+  .album-caption h4
+  {
+    text-align: center;
+    margin: 5px 0;
+  }
+
   .middle .feed .action-button{
     display: flex;
     justify-content: space-between;

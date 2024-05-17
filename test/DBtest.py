@@ -12,7 +12,7 @@ my_cursor = my_db.cursor()
 
 
 
-my_cursor.execute("SHOW TABLES")
+my_cursor.execute("Select * from user")
 # my_cursor.execute("Select * from ")
 
 

@@ -25,13 +25,30 @@
 <main>
 <div class="container" id="container">
     <div class="form-container sign-up">
-      <form name="action" value="signup" method="post" novalidate >
+      <form action="{{ url_for('login') }}" name="action" value="signup" method="post" novalidate >
         {{sform.hidden_tag()}}
         <h1>Create Account</h1>
         <div class="social-icons"></div>
         {{sform.username()}}
+        {% for error in sform.username.errors %}
+            <span style="color: hsl(252,75%,60%);">{{ error }}</span>
+        {% endfor %}
         {{sform.email()}}
+        {% for error in sform.email.errors %}
+            <span style="color: hsl(252,75%,60%);">{{ error }}</span>
+        {% endfor %}
         {{sform.password()}}
+        {% for error in sform.password.errors %}
+            <span style="color: hsl(252,75%,60%);">{{ error }}</span>
+        {% endfor %}
+        {{sform.password2()}}
+        {% for error in sform.password2.errors %}
+            <span style="color: hsl(252,75%,60%);">{{ error }}</span>
+        {% endfor %}
+        {{sform.firstname()}}
+        {{sform.lastname()}}
+        {{sform.gender()}}
+        {{sform.birthdate()}}
         <div class="checkbox-family">
           <div class="checkbox-wrapper-12">
               <div class="cbx">
@@ -54,7 +71,10 @@
           <b>Join a family?</b>
         </div>
         {{ sform.family_id(id="familyTextField", placeholder="Family ID") }}
-        {{sform.submit()}}
+        {% for error in sform.family_id.errors %}
+            <span style="color: hsl(252,75%,60%);">{{ error }}</span>
+        {% endfor %}
+        {{sform.submit_signup()}}
       </form>
     </div>
     <div class="form-container sign-in">
