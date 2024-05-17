@@ -6,6 +6,7 @@ from src import app,db
 import sqlalchemy as sa
 import time
 from sqlalchemy import desc
+from sqlalchemy.orm import aliased
 
 from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, LikeForm, UnlikeForm, UnfollowForm , CreateFamilyForm, EditContentForm
 
@@ -123,6 +124,27 @@ def user(username):
     #print(user_family.familyname)
     return render_template('profile.html' , user = user , user_family = user_family , current_user = current_user)
 
+
+
+
+@app.route('/like_post', methods=['POST'])
+def like_post():
+    content_id = request.form['name']
+    new_like = UserLikedContent(UserId=current_user.id, ContentId=content_id)
+    db.session.add(new_like)
+    db.session.commit()
+    return jsonify({'status': 'liked'})
+
+@app.route('/unlike_post', methods=['POST'])
+def unlike_post():
+    content_id = request.form['name']
+    like = UserLikedContent.query.filter_by(UserId=current_user.id, ContentId=content_id).first()
+    db.session.delete(like)
+    db.session.commit()
+    return jsonify({'status': 'unliked'})
+
+
+
 @app.route('/feedpage/<username>', methods=['GET', 'POST'])
 @login_required
 # show the posts
@@ -134,9 +156,6 @@ def feedPage(username):
     
     form  = ContentForm()
     followingform = FollowForm()
-    likeForm = LikeForm()
-    Unlikeform = UnlikeForm()
-    
     #When submit form, it will create object from Content including the submitted data.
     if form.submit.data:
         content = Content(description = form.description.data, visibility = form.visibility.data, userId = form.userID.data, Type = form.type.data)
@@ -193,33 +212,12 @@ def feedPage(username):
 
 
     if followingform.validate_on_submit() and followingform.submit.data:
-        print("2")
         newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  followingform.followedFamily.data)
         db.session.add(newFollowing)
         db.session.commit()
         followingform.followedFamily.data = None #to clear the form after adding post
 
         
-    #Like Form
-    
-
-    if likeForm.validate_on_submit() and likeForm.submit1.data:
-        print(likeForm.ContentId.data)
-        print(user.id)
-        newLike = UserLikedContent(UserId = user.id, ContentId = likeForm.ContentId.data)
-        db.session.add(newLike)
-        db.session.commit()
-        likeForm.ContentId.data = None
-    
-    
-    # Unlike Form
-    
-
-    if Unlikeform.validate_on_submit() and Unlikeform.submit2.data:
-        entry_to_delete = db.session.query(UserLikedContent).filter(UserLikedContent.ContentId == Unlikeform.ContentId.data, UserLikedContent.UserId == user.id).first()
-        db.session.delete(entry_to_delete)
-        db.session.commit()
-        Unlikeform.ContentId.data = None
 
 
     # show families to be followed
@@ -242,13 +240,52 @@ def feedPage(username):
         join(User, User.FamilyID == FamilyFollowing.FollowedFamilyId).\
         join(Content, User.id == Content.userId).\
         join(FamilyAlias, FamilyAlias.id == FamilyFollowing.FollowedFamilyId).\
-        join(ContentPhotos, Content.id == ContentPhotos.contentId).all()
+
     
+
+    #
+    like_count_subquery = db.session.query(
+    UserLikedContent.ContentId,
+    sa.func.count(UserLikedContent.ContentId).label('like_count')
+    ).group_by(UserLikedContent.ContentId).subquery()
+    family_alias = aliased(Family)
+    family_following_alias = aliased(FamilyFollowing)
+    user_alias = aliased(User)
+    content_alias = aliased(Content)
+    content_photos_alias = aliased(ContentPhotos)
+
+    # Perform the main query with the join
+    query = db.session.query(
+        family_alias,
+        family_following_alias,
+        user_alias,
+        content_alias,
+        content_photos_alias,
+        sa.func.coalesce(like_count_subquery.c.like_count, 0).label('like_count')
+    ).join(
+        family_following_alias, family_alias.id == family_following_alias.FollowingFamilyId
+    ).join(
+        user_alias, user_alias.FamilyID == family_following_alias.FollowedFamilyId
+    ).join(
+        content_alias, user_alias.id == content_alias.userId
+    ).outerjoin(
+        UserLikedContent, UserLikedContent.ContentId == content_alias.id
+    ).join(
+        content_photos_alias, content_alias.id == content_photos_alias.contentId
+    ).outerjoin(
+        like_count_subquery, like_count_subquery.c.ContentId == content_alias.id
+    )
+
+    results = query.all()
+    #
+
+
+
     families_filtered = [row for row in families if row.id not in alredy_followed_families]
     
 
-    posts = [row for row in TableOfContent if row[0].id == family_id]
-    
+    posts = [row for row in results if row[0].id == family_id]
+
 
     # Liked content
 
@@ -257,7 +294,7 @@ def feedPage(username):
     for liked in LikedContent:
         already_liked.append(liked.ContentId)
     
-    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = already_liked, form = form, followingForm = followingform, LikingForm = likeForm, UnlinkingForm = Unlikeform)
+    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = already_liked, form = form, followingForm = followingform)
 
 
 
