@@ -59,6 +59,31 @@
                 }
             });
         });
+        $(document).on('click', '.Follow', function(event){
+            event.preventDefault();
+            var button = $(this);
+            var Id = button.data('family.id');
+            var form = button.closest('form');
+            
+            $.ajax({
+                type: 'POST',
+                url: '/follow_family',
+                data: form.serialize(),
+                success: function(response){
+                    if (response.status === 'followed') {
+                        button.text('Followed');
+                        button.css('background-color', '#9e98b3')
+                    } else {
+                        alert("Failed to unlike post.");
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error("Error occurred:", error);
+                    alert("Error occurred while unliking the post.");
+                }
+            });
+        });
+        //follow
     });
 </script>
 </head>
@@ -339,10 +364,9 @@
                                 <h5>{{ family.familyname }}</h5>
                             </div>
                         </div>
-                        <form method="post" class="follow">
-                            {{ followingForm.hidden_tag() }}
-                            {{ followingForm.followedFamily(type = "hidden", value = family.id) }}
-                            {{ followingForm.submit1(class="btn btn-primary") }}
+                        <form class="follow" method="POST">
+                            <input type="hidden" name="name" id="name" value="{{ family.id }}">
+                            <button type="button" class="btn btn-primary Follow" data-post-id="{{ family.id }}"> Follow </button>
                         </form>
                     </div>
                     {% endfor %}
