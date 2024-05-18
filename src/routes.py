@@ -257,6 +257,7 @@ def feedPage(username):
     # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
     alredy_followed_families = []
+    # alredy_followed_families_photo = []
     for family in alredy_followed:
         alredy_followed_families.append(family.FollowedFamilyId)
 
@@ -269,10 +270,6 @@ def feedPage(username):
 
 
 
-    TableOfContent = db.session.query(Family, FamilyFollowing, User, Content, ContentPhotos, FamilyAlias).\
-        join(FamilyFollowing, Family.id == FamilyFollowing.FollowingFamilyId).\
-        join(User, User.FamilyID == FamilyFollowing.FollowedFamilyId).\
-        join(Content, User.id == Content.userId)
 
     
 
