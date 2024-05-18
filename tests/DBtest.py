@@ -19,11 +19,10 @@ my_cursor = my_db.cursor()
 # my_cursor.execute("Drop Table content")
 # my_cursor.execute("Drop Table User")
 # my_cursor.execute("Delete from Family")
-# my_cursor.execute("Drop Table alembic_version")
+my_cursor.execute("Select * from contentPhotos")
 
 
-# my_cursor.execute("")
-
+#
 
 
 

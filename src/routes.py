@@ -1,5 +1,8 @@
 
-from flask import render_template , redirect ,request , flash,url_for, jsonify , session
+from flask import  render_template , redirect ,request , flash,url_for, jsonify , session
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+
+
 
 
 from src import app,db
@@ -16,7 +19,7 @@ from sqlalchemy.orm import aliased
 
 from flask_login import current_user,login_user,login_required,logout_user
 import os
-
+from src.methods import uploadImage
 
 
 @app.route('/')
@@ -90,30 +93,13 @@ def create_family():
         coverImage = createfam.family_cover_input.data
         
         if profileImage:
-            filename = f"{uniqueId}-{profileImage.filename}"
-            image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
-            profileImage.save(image_path)
-            
-            
-            image_path = f"../static/images/{filename}"
-            new_family.profilephoto = image_path
+            new_family.profilephoto = uploadImage(profileImage, uniqueId)
                 
         if coverImage:
-            filename = f"{uniqueId}-{coverImage.filename}"
-            image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
-            coverImage.save(image_path)
-            
-            
-            image_path = f"../static/images/{filename}"
-            new_family.coverphoto = image_path
-
-                            
+            new_family.coverphoto = uploadImage(coverImage, uniqueId)
                 
                 
                 
-        
-        
-        
         
         
         db.session.add(new_family)
@@ -211,28 +197,15 @@ def feedPage(username):
             image = form.postImage.data
             print(image)
             if image:
-                filename = f"{contentID}-{image.filename}"
-                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
-                image.save(image_path)
-                
-                
-                image_path = f"../static/images/{filename}"
-                contentPhotos.photoUrl = image_path 
-                
-                print(image_path)
+                contentPhotos.photoUrl = uploadImage(image, contentID)
+
                 
                 
         else:
             image = form.albumImage.data
             if image:
-                filename = f"{contentID}-{image.filename}"
-                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
-                image.save(image_path)
                 
-                image_path = f"../static/images/{filename}"
-                contentPhotos.photoUrl = image_path 
-                
-                print(image_path)
+                contentPhotos.photoUrl = uploadImage(image, contentID)
                 
         db.session.add(contentPhotos)
         db.session.commit()
@@ -366,19 +339,11 @@ def family_page(family_id):
     if form.validate_on_submit() and form.submitedit.data:
         new_profile_image = form.profile_photo.data
         if new_profile_image:
-                filename = f"FP{user_family.id}-{new_profile_image.filename}"
-                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
-                new_profile_image.save(image_path)
-                image_path = f"../static/images/{filename}"
-                user_family.profilephoto = image_path
+            user_family.profilephoto = uploadImage(new_profile_image, user_family.id)
         
         new_cover_image = form.cover_photo.data
         if new_cover_image:
-                filename = f"FC{user_family.id}-{new_cover_image.filename}"
-                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
-                new_cover_image.save(image_path)
-                image_path = f"../static/images/{filename}"
-                user_family.coverphoto = image_path
+            user_family.coverphoto = uploadImage(new_cover_image, user_family.id)
 
         if form.bio.data:
             user_family.bio = form.bio.data
@@ -405,14 +370,13 @@ def family_page(family_id):
             # Update the fields if they are not empty in the form
             if editContentForm.description.data:
                 content.description = newDescription
+                
             if editContentForm.visibility.data:
                 content.visibility = bool(newVisibility)
-            if editContentForm.image.data:
-                filename = f"{contentId}-{newImage.filename}"
-                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
-                newImage.save(image_path)
-                image_path = f"../static/images/{filename}"
-                contentPhoto.photoUrl = image_path
+                
+            if editContentForm.image.data:                
+                image_url = uploadImage(newImage,contentId)
+                contentPhoto.photoUrl = image_url
 
             db.session.commit()  # Commit changes to the database
         
@@ -421,9 +385,6 @@ def family_page(family_id):
         editContentForm.image.data = None
         
         print(f"The new data\n\n {contentId}\n{newDescription}\n{newVisibility}\n{newImage}")
-        
-        
-        
         
     
     # Perform the main query with the join
@@ -453,6 +414,3 @@ def family_page(family_id):
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
     return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family , posts = posts , family_members = family_members, deleteForm = deleteForm, editContentForm = editContentForm)
-
-    
-    
