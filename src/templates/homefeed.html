@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="icon" type="image/png" href="{{url_for("static",filename='images/icon.png')}}">
 <script>
     $(document).ready(function(){
         $(document).on('click', '.ph--heart', function(event){
@@ -98,10 +99,9 @@
                 <input type="search" placeholder="Search for Families or Friends">
             </div>
             <div class="create">
-                <label for="create-post" class="btn btn-primary">Create</label>
-                <!-- <div class="profile-photo">
-                    <img src="./images/profile1.png">
-                </div>  -->
+                <div class="profile-photo">
+                    <img src="{{User.photo}}">
+                </div>
             </div>
         </div>
     </nav>
@@ -129,13 +129,10 @@
                         <span><span class="iconoir--profile-circle"></span></span> <h3>Profile</h3>
                     </a>
                     <a class="menu-item" href="{{ url_for('family_page', family_id=User.FamilyID) }}">
-                        <span><span class="iconoir--profile-circle"></span></span> <h3>My Family</h3>
-                    </a>
-                    <a class="menu-item">
-                        <span><span class="ph--compass"></span></span> <h3>Explore</h3>
+                        <span><span class="icon-park-outline--family"></span></span> <h3>My Family</h3>
                     </a>
                     <a class="menu-item" id="notifications">
-                        <span><span class="ph--bell"></span><small class="notification-count">10</small></span> <h3>Notifications</h3>
+                        <span><span class="ph--bell"></span><small class="notification-count">3</small></span> <h3>Notifications</h3>
                         <!--notification popup window-->
                         <div class="notification-popup">
                             <div>
@@ -168,14 +165,8 @@
                             <!-- end of notification popup window-->
                         </div>
                     </a>
-                    <a class=" menu-item" id="messages-notifications">
-                        <span><span class="mynaui--envelope"></span><small class="notification-count">6</small></span> <h3>Messages</h3>
-                    </a>
-                    <a class="menu-item">
-                        <span><span class="solar--settings-linear"></span></span> <h3>Settings</h3>
-                    </a>
                     <a class="menu-item" href="{{ url_for('logout') }}">
-                        <span><span class="solar--settings-linear"></span></span> <h3>Logout</h3>
+                        <span><span class="circum--logout"></span></span> <h3>Logout</h3>
                     </a>
                 </div>
                 <label for="create-post" class="btn btn-primary">Create Post</label>
@@ -267,7 +258,6 @@
                             <div class="caption">
                                 <p><b>{{ post[2].username }}</b> {{ post[3].description }}</p>
                             </div>
-                            <div class="text-muted comments">View all 200 comments</div>
                         
                     </div>
                     {% endif %}
@@ -310,7 +300,7 @@
                                 </div>
                             </div>
                             <div class="liked-by">
-                                <span><img src="{{url_for('static', filename='./images/profile1.png')}}"></span>
+                             <!--    <span><img src="{{url_for('static', filename='./images/profile1.png')}}"></span>-->
                                 <p>Liked by <b>{{post[-1]}}</b> people</p>
                             </div>
                     </div>
@@ -324,43 +314,13 @@
             </div>
             <!-- RIGHT  -->
             <div class="right">
-                <div class="messages">
-                    <div class="heading">
-                        <h4>Messages</h4><span class="lucide--edit"></span>
-                    </div>
-                    <div class="search-bar">
-                        <span class="lucide--search"></span>
-                        <input type="search" placeholder="Search messages" id="message-search">
-                    </div>
-                    <div class="category">
-                        <h6 class="active">
-                            Primary
-                        </h6>
-                        <h6>
-                            General
-                        </h6>
-                        <h6 class="message-requests">
-                            Requests(7)
-                        </h6>
-                    </div>
-                    <div class="message">
-                        <div class="profile-photo">
-                            <img src="{{url_for('static', filename='./images/profile2.png')}}">
-                            <div class="active"></div>
-                        </div>
-                        <div class="message-body">
-                            <h5>Tarek Shalaby</h5>
-                            <p class="text-bold">ana 3awz atmaran</p>
-                        </div>
-                    </div>
-                </div>
                 <div class="friend-requests">
                     <h4>Follow Families</h4>
                     {% for family in Families %}
                     <div class="request">
                         <div class="info">
                             <div class="profile-photo">
-                                <img src="{{url_for('static', filename='./images/profile3.png')}}">
+                                <img src="{{family.profilephoto}}">
                             </div>
                             <div>
                                 <h5>{{ family.familyname }}</h5>

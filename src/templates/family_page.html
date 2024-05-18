@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
 
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" href="{{url_for(static,filename='images/icon.png')}}">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function(){
@@ -79,6 +80,7 @@
                 <input type="search" placeholder="Search for Families or Friends">
             </div>
             <div class="create">
+                <span class="icon-follow icon-park-outline--family"></span>
                 {% if current_user.FamilyID == user_family.id %}
                 <label for="create-post" class="btn btn-primary">Create</label>
                 <label for="create-post" class="btn btn-primary"><button  class="button-edit" onclick="openModal()">Edit</button></label>
@@ -170,17 +172,11 @@
 
                                
                             </div>
-                            <div class="action-button">
-                                <div class="interaction-buttons">
-                                    <span class="ph--heart"></span>
-                                    <span class="iconamoon--comment-bold"></span>
-                                </div>
-                            </div>
-
+                                         
                             <div class="caption">
                                 <p><b>{{member.username}}</b> {{content.description}}</p>
                             </div>
-                            <div class="text-muted comments">View all 200 comments</div> 
+                            
                     </div>
 
                     {% endif %}
@@ -219,25 +215,9 @@
                         </div>
                             <div class="photo album-photo">
                                 <img src="{{ photo.photoUrl }}">
-                            </div>
-                            <div class="action-button">
-                                <div class="interaction-buttons">
-                                    {% if content.id in Liked %}
-                                        <form class="unlike-form" method="POST">
-                                            <input type="hidden" name="name" id="name" value="{{ content.id }}">
-                                            <button type="button" class="ph--heart-liked" data-post-id="{{ content.id }}"></button>
-                                        </form>
-                                    {% else %}
-                                        <form class="like-form" method="POST">
-                                            <input type="hidden" name="name" id="name" value="{{ content.id }}">
-                                            <button type="button" class="ph--heart" data-post-id="{{ content.id }}"></button>
-                                        </form>
-                                    {% endif %}
-                                </div>
-                            </div>
+                            </div>                            
                     </div>
-
-                    {% endif %}
+                {% endif %}
 
                     <!-- feed 1 end  -->
 
@@ -430,7 +410,23 @@
                 eModal.style.display = 'none';
             });
     
-        
+            document.addEventListener('DOMContentLoaded', function() {
+                var iconFollow = document.querySelector('.icon-follow');
+                var leftElement = document.querySelector('.left');
+                var rightElement = document.querySelector('.right');
+                var dimmingOverlay = document.body.style;
+            
+                iconFollow.addEventListener('click', function() {
+                    // Toggle display of left and right elements
+                    leftElement.style.display = leftElement.style.display === 'none' ? 'block' : 'none';
+                    rightElement.style.display = rightElement.style.display === 'none' ? 'block' : 'none';
+            
+                    // Toggle dimming effect by adjusting opacity of the body's ::before pseudo-element
+                    dimmingOverlay.setProperty('--overlay-opacity', dimmingOverlay.getPropertyValue('--overlay-opacity') === '0' ? '0.5' : '0');
+                });
+            });
+            
+              
     
     
     

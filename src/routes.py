@@ -250,6 +250,7 @@ def feedPage(username):
     # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
     alredy_followed_families = []
+    # alredy_followed_families_photo = []
     for family in alredy_followed:
         alredy_followed_families.append(family.FollowedFamilyId)
 
@@ -260,7 +261,6 @@ def feedPage(username):
     
     FamilyAlias = aliased(Family)
 
-    
 
     #
     like_count_subquery = db.session.query(

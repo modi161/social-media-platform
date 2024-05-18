@@ -10,7 +10,7 @@
 --color-danger:hsl(0,95%,65%);
 --color-dark:hsl(252,30%,17%);
 --color-black:hsl(252,30%,10%);
-
+--overlay-opacity:0;
 --border-radius:2rem;
 --card-border-raduis:1rem;
 --btn-padding:0.6rem 1rem;
@@ -231,7 +231,6 @@ nav .create{
   main .container .left{
     height: max-content;
     position: sticky;
-    top: var(--sticky-top-left);
   }
 
   main .container .left .profile{
@@ -351,6 +350,10 @@ nav .create{
     align-items: start;
     gap: 1rem;
     margin-bottom: 1rem;
+}
+.left .messages {
+  overflow: auto;
+  max-height: 80vh;
 }
 
 .left .notification-popup small{
@@ -733,8 +736,8 @@ border-radius: var(--border-radius);
   }
   .messages .message .profile-photo img{
     border-radius: 50%;
-    height: 100%;
-    object-fit: cover;
+    height: fit-content;
+    aspect-ratio: 1;
   }
   .messages .message .profile-photo{
     position: relative;
@@ -805,6 +808,7 @@ border-radius: var(--border-radius);
     .left{
         width: 5rem;
         z-index: 5;
+        top: var(--sticky-top-left);
     }
     main .container .left .profile{
         display: none;
@@ -815,15 +819,25 @@ border-radius: var(--border-radius);
     .left .btn{
         display: none;
     }
+    nav .icon-follow{
+      display: none;
+    }
   }
-
+@media screen and (min-width:992px) {
+  nav .icon-follow{
+    display: none;
+  }
+}
 
 @media  screen and (max-width:992px) {
     nav .search-bar{
         display: none;
     }
+    nav .icon-follow{
+      display: block;
+    }
     main .container{
-        grid-template-columns: 0 auto 5rem;
+        grid-template-columns: 0 auto auto;
         gap: 0;
     }
     main .container .left{
@@ -849,20 +863,19 @@ border-radius: var(--border-radius);
     main .container .middle{
         grid-column: 1/3;
     }
-    main .container .right{
-        position: fixed;
-        display: block;
-    }
     main .container .right .messages {
-        position: absolute;
-        left: 3rem;
-        top:30rem;
-        width:20rem;
-        display: none;
+        
     }
     main .container .right .friend-requests{
         display: none;
     }
+    /* main .container .left{
+      display: none;
+    } */
+    /* main .container .right{
+      display: none;
+    } */
+    
 }
 
 
@@ -941,4 +954,76 @@ max-width: 400px;
 
 #family-cover-input {
   display: none;
+}
+
+.icon-park-outline--family {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%236b4ce6' stroke-linecap='round' stroke-width='3.2'%3E%3Cpath d='M10 19s-5.143 2-6 9m34-9s5.143 2 6 9m-26-9s4.8 1.167 6 7m6-7s-4.8 1.167-6 7m-4 8s-4.2.75-6 6m14-6s4.2.75 6 6'/%3E%3Ccircle cx='24' cy='31' r='5' stroke-linejoin='round'/%3E%3Ccircle cx='34' cy='14' r='6' stroke-linejoin='round'/%3E%3Ccircle cx='14' cy='14' r='6' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Default styles - do not change existing styles */
+
+/* Media query for phone-sized screens */
+/* Default styles - do not change existing styles */
+
+/* Media query for phone-sized screens */
+@media (max-width: 992px) {
+  /* Overlay background dimming */
+  body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, var(--overlay-opacity, 0));  /* Semi-transparent black */
+      z-index: 1;
+      display: none;
+  }
+  body.dimmed::before {
+    display: block;
+  }
+  /* Target the specific .container elements for right and left containers */
+  .right, .left {
+    position: relative;
+    z-index: 2; /* Ensure they are above the dimmed background */
+    width: 100%; /* Set width to 70% */
+    margin: 0 auto; /* Center the containers */
+    display: none;
+}
+.right .messages{
+  position: fixed;
+  top: 4em;
+  left: 15%;
+  max-height: 15em;
+  overflow: auto;
+}
+.container .left{
+  top: 20em;
+}
+.left .messages{
+  max-height: 23em;
+}
+
+/* Ensure the right container is on top of the left container */
+.right {
+    margin-bottom: 20px; /* Add some spacing between the two containers */
+}
+
+/* Additional styling to ensure full width and proper spacing */
+.messages {
+    margin: auto;
+    width: 70%;
+}
+
+
+/* Ensure profile photos are displayed properly */
+.profile-photo img {
+    max-width: 100%;
+    border-radius: 50%;
+}
 }
