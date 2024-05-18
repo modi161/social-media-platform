@@ -9,14 +9,14 @@ from src.models import User,Family
 
 class Editform(FlaskForm):
     bio = TextAreaField('Bio')
-    cover_photo = FileField('Cover Photo', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
-    profile_photo = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
-    submit = SubmitField('Save')
+    cover_photo = FileField('Cover Photo')
+    profile_photo = FileField('Profile Picture')
+    submitedit = SubmitField('Save')
 
  
 class Loginform(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()],render_kw={"placeholder": "Email"})
-    password = PasswordField('Password' , validators=[DataRequired()],render_kw={"placeholder": "Password"}) 
+    email = StringField('Email',id="email_login" ,validators=[DataRequired()],render_kw={"placeholder": "Email"})
+    password = PasswordField('Password' , id="password_login",validators=[DataRequired()],render_kw={"placeholder": "Password"}) 
     log = SubmitField('Login')
     
     

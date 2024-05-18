@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='profile.css' ) }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>profile page</title>
+    <link rel="icon" type="image/png" href="{{url_for("static",filename='images/icon.png')}}">
 {% endblock %}
     
 
@@ -29,7 +30,7 @@
         <div class="section">
             <div class="userinfo">
                 <div class="profile-image">
-                    <img src="https://www.newarab.com/sites/default/files/2023-08/GettyImages-1258930731.jpg">
+                    <img src="{{user.photo}}">
                 </div>
                 <div class="data">
                     <div class="row1">

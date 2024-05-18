@@ -97,8 +97,7 @@ def create_family():
             
             image_path = f"../static/images/{filename}"
             new_family.profilephoto = image_path
-            
-            
+                
         if coverImage:
             filename = f"{uniqueId}-{coverImage.filename}"
             image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
@@ -107,6 +106,7 @@ def create_family():
             
             image_path = f"../static/images/{filename}"
             new_family.coverphoto = image_path
+
                             
                 
                 
@@ -186,7 +186,6 @@ def follow_family():
     return jsonify({'status': 'followed'})
 
 @app.route('/feedpage/<username>', methods=['GET', 'POST'])
-@login_required
 # show the posts
 def feedPage(username):
     if current_user.username != username:
@@ -251,6 +250,7 @@ def feedPage(username):
     # show families to be followed
     alredy_followed = FamilyFollowing.query.filter(FamilyFollowing.FollowingFamilyId == family_id).all()
     alredy_followed_families = []
+    # alredy_followed_families_photo = []
     for family in alredy_followed:
         alredy_followed_families.append(family.FollowedFamilyId)
 
@@ -261,7 +261,6 @@ def feedPage(username):
     
     FamilyAlias = aliased(Family)
 
-    
 
     #
     like_count_subquery = db.session.query(
@@ -332,7 +331,6 @@ def unfollow_family():
 @app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
 @login_required
 def family_page(family_id):
-    
     deleteForm  = DeleteContentForm()
     editContentForm = EditContentForm()
 
@@ -342,9 +340,15 @@ def family_page(family_id):
         content = Content.query.get(contentId)
 
         
+        LikedContents = UserLikedContent.query.filter(UserLikedContent.ContentId == contentId).all()        
         photos = ContentPhotos.query.filter_by(contentId=contentId).all()
         
         #Delete row from the database, first photos then content
+        
+        for LikedContent in LikedContents:
+            db.session.delete(LikedContent)
+            db.session.commit()
+        
         for photo in photos:
             db.session.delete(photo)
             db.session.commit()
@@ -359,19 +363,34 @@ def family_page(family_id):
     user_family = Family.query.filter_by(id = family_id).first()
     form = Editform()
     
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.submitedit.data:
+        new_profile_image = form.profile_photo.data
+        if new_profile_image:
+                filename = f"FP{user_family.id}-{new_profile_image.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                new_profile_image.save(image_path)
+                image_path = f"../static/images/{filename}"
+                user_family.profilephoto = image_path
+        
+        new_cover_image = form.cover_photo.data
+        if new_cover_image:
+                filename = f"FC{user_family.id}-{new_cover_image.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                new_cover_image.save(image_path)
+                image_path = f"../static/images/{filename}"
+                user_family.coverphoto = image_path
+
         if form.bio.data:
             user_family.bio = form.bio.data
-            db.session.commit()  # Commit changes to the database
-            return redirect(url_for('family_page', family_id=family_id))
-        else:
-            # Handle form validation failure if needed
-            pass
+        
+        db.session.commit()  # Commit changes to the database   
+        return redirect(url_for('family_page', family_id=family_id))
+        
     else:
         # This block only executes when the page first loads or if validation fails
         if user_family:
             form.bio.data = user_family.bio
-            
+    
             
     if editContentForm.validate_on_submit() and editContentForm.submit2.data:
         contentId = editContentForm.contentID.data
@@ -405,7 +424,9 @@ def family_page(family_id):
         
         
         
+        
     
+    # Perform the main query with the join
     posts = db.session.query(User,  Content, ContentPhotos)\
     .join(Family, User.FamilyID == Family.id)\
     .join(Content, User.id == Content.userId)\
@@ -413,6 +434,10 @@ def family_page(family_id):
     .filter(Family.id == user_family.id)\
     .order_by(Content.timestamp.desc())\
     .all()
+    
+    
+    print(posts)
+
     
     
     family_members = db.session.query(User).join(Family,User.FamilyID == Family.id)\
@@ -427,7 +452,7 @@ def family_page(family_id):
     
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
-    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm, editContentForm = editContentForm)
+    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family , posts = posts , family_members = family_members, deleteForm = deleteForm, editContentForm = editContentForm)
 
     
     
