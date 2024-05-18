@@ -20,5 +20,3 @@ __pycache__/
 src/static/images/*
 #Vritual Enviornment
 venv/
-
-src/static/images/
