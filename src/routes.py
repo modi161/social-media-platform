@@ -297,7 +297,7 @@ def feedPage(username):
         like_count_subquery, like_count_subquery.c.ContentId == content_alias.id
     ).join(
         FamilyAlias, FamilyAlias.id == family_following_alias.FollowedFamilyId
-    )
+    ).order_by(desc(content_alias.timestamp))
 
     results = query.all()
     #
