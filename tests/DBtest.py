@@ -12,8 +12,17 @@ my_cursor = my_db.cursor()
 
 
 
-my_cursor.execute("Select * from userlikedcontent")
-# my_cursor.execute("Select * from ")
+# my_cursor.execute("Delete from FamilyPendingRequests")
+# my_cursor.execute("Delete from FamilyFollowing")
+# my_cursor.execute("Delete from UserLikedContent")
+# my_cursor.execute("Delete from ContentPhotos")
+# my_cursor.execute("Drop Table content")
+# my_cursor.execute("Drop Table User")
+# my_cursor.execute("Delete from Family")
+# my_cursor.execute("Drop Table alembic_version")
+
+
+# my_cursor.execute("")
 
 
 

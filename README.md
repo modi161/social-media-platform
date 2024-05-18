@@ -4,11 +4,12 @@ Reunion is a calm and warm place for documenting families’ memories, achieveme
 
 
 ## Setting up the project:
-1. Create a virtual environment:
+1. Open a bash terminal:
+2. Create a virtual environment:
     ```bash
     python3 -m venv venv
     ```
-2. Activate the virtual environment:
+3. Activate the virtual environment:
     - On Windows:
       ```bash
       venv\Scripts\Activate
@@ -17,15 +18,15 @@ Reunion is a calm and warm place for documenting families’ memories, achieveme
       ```bash
       source venv/bin/activate
       ```
-3. Install packages:
+4. Install packages:
     ```bash
     pip install -r requirements.txt
     ```
-4. Specify the Flask app:
+5. Specify the Flask app:
     ```bash
     export FLASK_APP=social_media.py
     ```
-5. Run the app!:
+6. Run the app!:
     ```bash
     flask run
     ```
