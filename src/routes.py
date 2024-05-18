@@ -97,8 +97,7 @@ def create_family():
             
             image_path = f"../static/images/{filename}"
             new_family.profilephoto = image_path
-            
-            
+                
         if coverImage:
             filename = f"{uniqueId}-{coverImage.filename}"
             image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
@@ -107,6 +106,7 @@ def create_family():
             
             image_path = f"../static/images/{filename}"
             new_family.coverphoto = image_path
+
                             
                 
                 
@@ -186,7 +186,6 @@ def follow_family():
     return jsonify({'status': 'followed'})
 
 @app.route('/feedpage/<username>', methods=['GET', 'POST'])
-@login_required
 # show the posts
 def feedPage(username):
     if current_user.username != username:
@@ -332,7 +331,6 @@ def unfollow_family():
 @app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
 @login_required
 def family_page(family_id):
-    
     deleteForm  = DeleteContentForm()
     editContentForm = EditContentForm()
 
@@ -342,9 +340,15 @@ def family_page(family_id):
         content = Content.query.get(contentId)
 
         
+        LikedContents = UserLikedContent.query.filter(UserLikedContent.ContentId == contentId).all()        
         photos = ContentPhotos.query.filter_by(contentId=contentId).all()
         
         #Delete row from the database, first photos then content
+        
+        for LikedContent in LikedContents:
+            db.session.delete(LikedContent)
+            db.session.commit()
+        
         for photo in photos:
             db.session.delete(photo)
             db.session.commit()
@@ -405,14 +409,54 @@ def family_page(family_id):
         
         
         
+        
+        
+    families = Family.query.filter(Family.id != family_id).all()
+
+
     
-    posts = db.session.query(User,  Content, ContentPhotos)\
-    .join(Family, User.FamilyID == Family.id)\
-    .join(Content, User.id == Content.userId)\
-    .join(ContentPhotos, ContentPhotos.contentId == Content.id)\
-    .filter(Family.id == user_family.id)\
-    .order_by(Content.timestamp.desc())\
-    .all()
+    FamilyAlias = aliased(Family)
+
+    #
+    like_count_subquery = db.session.query(
+    UserLikedContent.ContentId,
+    sa.func.count(UserLikedContent.ContentId).label('like_count')
+    ).group_by(UserLikedContent.ContentId).subquery()
+    family_alias = aliased(Family)
+    family_following_alias = aliased(FamilyFollowing)
+    user_alias = aliased(User)
+    content_alias = aliased(Content)
+    content_photos_alias = aliased(ContentPhotos)
+
+    # Perform the main query with the join
+    query = db.session.query(
+        family_alias,
+        family_following_alias,
+        user_alias,
+        content_alias,
+        content_photos_alias,
+        FamilyAlias,
+        sa.func.coalesce(like_count_subquery.c.like_count, 0).label('like_count')
+    ).join(
+        family_following_alias, family_alias.id == family_following_alias.FollowingFamilyId
+    ).join(
+        user_alias, user_alias.FamilyID == family_following_alias.FollowedFamilyId
+    ).join(
+        content_alias, user_alias.id == content_alias.userId
+    ).outerjoin(
+        UserLikedContent, UserLikedContent.ContentId == content_alias.id
+    ).join(
+        content_photos_alias, content_alias.id == content_photos_alias.contentId
+    ).outerjoin(
+        like_count_subquery, like_count_subquery.c.ContentId == content_alias.id
+    ).join(
+        FamilyAlias, FamilyAlias.id == family_following_alias.FollowedFamilyId
+    )
+
+    results = query.all()
+    
+    posts = [row for row in results if row[0].id == family_id]
+
     
     
     family_members = db.session.query(User).join(Family,User.FamilyID == Family.id)\
@@ -427,7 +471,7 @@ def family_page(family_id):
     
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
-    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm, editContentForm = editContentForm)
+    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family , posts = posts , family_members = family_members, deleteForm = deleteForm, editContentForm = editContentForm)
 
     
     
