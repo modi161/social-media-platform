@@ -72,7 +72,9 @@
                 success: function(response){
                     if (response.status === 'followed') {
                         button.text('Followed');
-                        button.css('background-color', '#9e98b3')
+                        button.css('cursor', 'default');
+                        button.css('background-color', '#9e98b3');
+                        button.prop('disabled', true);
                     } else {
                         alert("Failed to unlike post.");
                     }

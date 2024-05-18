@@ -28,7 +28,10 @@
                 success: function(response){
                     if (response.status === 'unfollowed') {
                         button.text('Unfollowed');
-                        button.css('background-color', '#9e98b3')
+                        button.css('cursor', 'default');
+                        button.css('background-color', '#9e98b3');
+                        button.prop('disabled', true);
+
                     } else {
                         alert("Failed to unfollow.");
                     }
@@ -196,7 +199,7 @@
                                     <small>{{ content.timestamp }}</small>
                                 </div>
                             </div>
-                            
+
                             {% if current_user.FamilyID == user_family.id %}
                             <div class = "post-icons">
                                 <div class="edit-post" data-content-id = "{{content.id}}" data-content-description = "{{content.description}}">
