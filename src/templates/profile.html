@@ -10,7 +10,23 @@
     
 
 {% block body %}
+<nav>
     <div class="container">
+        <h2 class="log"><a href="{{ url_for('feedPage', username=current_user.username) }}">Reunion</a></h2>
+        <div class="search-bar">
+            <span class="lucide--search"></span>
+            <input type="search" placeholder="Search for Families or Friends">
+        </div>
+        <div class="create">
+            <span class="icon-follow icon-park-outline--family"></span>
+            {% if current_user.FamilyID == user_family.id %}
+            <label for="create-post" class="btn btn-primary">Create</label>
+            <label for="create-post" class="btn btn-primary"><button  class="button-edit" onclick="openModal()">Edit</button></label>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+<div class="container">
         <div class="sidebar">
             <div class="logo">
                 <h1>Reunion</h1>                
