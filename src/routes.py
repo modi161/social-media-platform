@@ -410,52 +410,18 @@ def family_page(family_id):
         
         
         
-        
-    families = Family.query.filter(Family.id != family_id).all()
-
-
     
-    FamilyAlias = aliased(Family)
-
-    #
-    like_count_subquery = db.session.query(
-    UserLikedContent.ContentId,
-    sa.func.count(UserLikedContent.ContentId).label('like_count')
-    ).group_by(UserLikedContent.ContentId).subquery()
-    family_alias = aliased(Family)
-    family_following_alias = aliased(FamilyFollowing)
-    user_alias = aliased(User)
-    content_alias = aliased(Content)
-    content_photos_alias = aliased(ContentPhotos)
-
     # Perform the main query with the join
-    query = db.session.query(
-        family_alias,
-        family_following_alias,
-        user_alias,
-        content_alias,
-        content_photos_alias,
-        FamilyAlias,
-        sa.func.coalesce(like_count_subquery.c.like_count, 0).label('like_count')
-    ).join(
-        family_following_alias, family_alias.id == family_following_alias.FollowingFamilyId
-    ).join(
-        user_alias, user_alias.FamilyID == family_following_alias.FollowedFamilyId
-    ).join(
-        content_alias, user_alias.id == content_alias.userId
-    ).outerjoin(
-        UserLikedContent, UserLikedContent.ContentId == content_alias.id
-    ).join(
-        content_photos_alias, content_alias.id == content_photos_alias.contentId
-    ).outerjoin(
-        like_count_subquery, like_count_subquery.c.ContentId == content_alias.id
-    ).join(
-        FamilyAlias, FamilyAlias.id == family_following_alias.FollowedFamilyId
-    )
-
-    results = query.all()
+    posts = db.session.query(User,  Content, ContentPhotos)\
+    .join(Family, User.FamilyID == Family.id)\
+    .join(Content, User.id == Content.userId)\
+    .join(ContentPhotos, ContentPhotos.contentId == Content.id)\
+    .filter(Family.id == user_family.id)\
+    .order_by(Content.timestamp.desc())\
+    .all()
     
-    posts = [row for row in results if row[0].id == family_id]
+    
+    print(posts)
 
     
     
