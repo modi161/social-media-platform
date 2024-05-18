@@ -97,8 +97,7 @@ def create_family():
             
             image_path = f"../static/images/{filename}"
             new_family.profilephoto = image_path
-            
-            
+                
         if coverImage:
             filename = f"{uniqueId}-{coverImage.filename}"
             image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
@@ -107,6 +106,7 @@ def create_family():
             
             image_path = f"../static/images/{filename}"
             new_family.coverphoto = image_path
+
                             
                 
                 
@@ -186,7 +186,6 @@ def follow_family():
     return jsonify({'status': 'followed'})
 
 @app.route('/feedpage/<username>', methods=['GET', 'POST'])
-@login_required
 # show the posts
 def feedPage(username):
     if current_user.username != username:
@@ -332,7 +331,6 @@ def unfollow_family():
 @app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
 @login_required
 def family_page(family_id):
-    
     deleteForm  = DeleteContentForm()
     editContentForm = EditContentForm()
 
@@ -342,9 +340,15 @@ def family_page(family_id):
         content = Content.query.get(contentId)
 
         
+        LikedContents = UserLikedContent.query.filter(UserLikedContent.ContentId == contentId).all()        
         photos = ContentPhotos.query.filter_by(contentId=contentId).all()
         
         #Delete row from the database, first photos then content
+        
+        for LikedContent in LikedContents:
+            db.session.delete(LikedContent)
+            db.session.commit()
+        
         for photo in photos:
             db.session.delete(photo)
             db.session.commit()
@@ -405,7 +409,9 @@ def family_page(family_id):
         
         
         
+        
     
+    # Perform the main query with the join
     posts = db.session.query(User,  Content, ContentPhotos)\
     .join(Family, User.FamilyID == Family.id)\
     .join(Content, User.id == Content.userId)\
@@ -413,6 +419,10 @@ def family_page(family_id):
     .filter(Family.id == user_family.id)\
     .order_by(Content.timestamp.desc())\
     .all()
+    
+    
+    print(posts)
+
     
     
     family_members = db.session.query(User).join(Family,User.FamilyID == Family.id)\
@@ -427,7 +437,7 @@ def family_page(family_id):
     
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
-    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm, editContentForm = editContentForm)
+    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family , posts = posts , family_members = family_members, deleteForm = deleteForm, editContentForm = editContentForm)
 
     
     
