@@ -296,7 +296,7 @@ def feedPage(username):
         like_count_subquery, like_count_subquery.c.ContentId == content_alias.id
     ).join(
         FamilyAlias, FamilyAlias.id == family_following_alias.FollowedFamilyId
-    )
+    ).order_by(desc(content_alias.timestamp))
 
     results = query.all()
     #
@@ -363,19 +363,34 @@ def family_page(family_id):
     user_family = Family.query.filter_by(id = family_id).first()
     form = Editform()
     
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.submitedit.data:
+        new_profile_image = form.profile_photo.data
+        if new_profile_image:
+                filename = f"FP{user_family.id}-{new_profile_image.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                new_profile_image.save(image_path)
+                image_path = f"../static/images/{filename}"
+                user_family.profilephoto = image_path
+        
+        new_cover_image = form.cover_photo.data
+        if new_cover_image:
+                filename = f"FC{user_family.id}-{new_cover_image.filename}"
+                image_path = os.path.join("src/static/images", filename) #there is bug here, in multiple images case. User can not upload duplicate images in the same content 
+                new_cover_image.save(image_path)
+                image_path = f"../static/images/{filename}"
+                user_family.coverphoto = image_path
+
         if form.bio.data:
             user_family.bio = form.bio.data
-            db.session.commit()  # Commit changes to the database
-            return redirect(url_for('family_page', family_id=family_id))
-        else:
-            # Handle form validation failure if needed
-            pass
+        
+        db.session.commit()  # Commit changes to the database   
+        return redirect(url_for('family_page', family_id=family_id))
+        
     else:
         # This block only executes when the page first loads or if validation fails
         if user_family:
             form.bio.data = user_family.bio
-            
+    
             
     if editContentForm.validate_on_submit() and editContentForm.submit2.data:
         contentId = editContentForm.contentID.data

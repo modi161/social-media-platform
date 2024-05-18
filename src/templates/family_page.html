@@ -67,7 +67,7 @@
                 {{ form.bio(cols=32, rows=4) }}
             </p>
             <p>
-                {{ form.submit() }}
+                {{ form.submitedit() }}
             </p>
         </form>
     </div>
@@ -105,7 +105,7 @@
         <div class ="family_name"> 
             <h3>{{user_family.familyname}}</h3>
             <p class="family_bio">{{user_family.bio}}</p>
-            <p>{{user_family.creationdate}}</p>
+            <p style="font-size: small;">{{user_family.creationdate.strftime('%Y-%m-%d')}} <span style="font-weight: bold;"> #{{user_family.id}}</span></p>
         </div>
 
 
