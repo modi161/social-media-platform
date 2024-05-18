@@ -12,7 +12,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
 
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(document).on('click', '.unFollow', function(event){
+            event.preventDefault();
+            var button = $(this);
+            var Id = button.data('followed_fam.id');
+            var form = button.closest('form');
+            
+            $.ajax({
+                type: 'POST',
+                url: '/unfollow_family',
+                data: form.serialize(),
+                success: function(response){
+                    if (response.status === 'unfollowed') {
+                        button.text('Unfollowed');
+                        button.css('background-color', '#9e98b3')
+                    } else {
+                        alert("Failed to unfollow.");
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error("Error occurred:", error);
+                    alert("Error occurred while unfollowing.");
+                }
+            });
+        });
+        //follow
+    });
+</script>
 </head>
 <body id="blur">
     <div id="myModal" class="modal">
@@ -229,10 +258,9 @@
                         </div>
                         <div class="message-body">
                             <h5><a href="{{ url_for('family_page', family_id=followed_fam.id) }}" >{{followed_fam.familyname}}</a></h5>
-                            <form method="post">
-                                {{ Unfollow.hidden_tag() }}
-                                {{ Unfollow.FamilyId(type = "hidden", value = followed_fam.id) }}
-                                {{ Unfollow.submit3(class="btn btn-primary") }}
+                            <form class="unfollow" method="POST">
+                                <input type="hidden" name="name" id="name" value="{{ followed_fam.id }}">
+                                <button type="button" class="btn btn-primary unFollow" data-post-id="{{ followed_fam.id }}"> Unfollow </button>
                             </form>
                             <p class="text-bold">{{followed_fam.bio}}</p>
                         </div>
