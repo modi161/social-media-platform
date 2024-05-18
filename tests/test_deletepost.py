@@ -22,7 +22,7 @@ class TestDeletepost():
     self.driver.get("https://reunion.azurewebsites.net/")
     self.driver.set_window_size(1524, 822)
     self.driver.find_element(By.ID, "email_login").click()
-    self.driver.find_element(By.ID, "email_login").send_keys("super@gmail.com")
+    self.driver.find_element(By.ID, "email_login").send_keys("testuser123@gmail.com")
     self.driver.find_element(By.ID, "password_login").click()
     self.driver.find_element(By.ID, "password_login").send_keys("123")
     self.driver.find_element(By.ID, "log").click()
