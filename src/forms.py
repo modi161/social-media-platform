@@ -15,8 +15,8 @@ class Editform(FlaskForm):
 
  
 class Loginform(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()],render_kw={"placeholder": "Email"})
-    password = PasswordField('Password' , validators=[DataRequired()],render_kw={"placeholder": "Password"}) 
+    email = StringField('Email',id="email_login" ,validators=[DataRequired()],render_kw={"placeholder": "Email"})
+    password = PasswordField('Password' , id="password_login",validators=[DataRequired()],render_kw={"placeholder": "Password"}) 
     log = SubmitField('Login')
     
     
@@ -92,16 +92,6 @@ class CreateFamilyForm(FlaskForm):
     
 
 
-class FollowForm(FlaskForm):
-    followedFamily = IntegerField("Followed", validators=[DataRequired()])
-    submit1 = SubmitField("Follow")
-
-    
-    
-class UnfollowForm(FlaskForm):
-    FamilyId = IntegerField("Id", validators=[DataRequired()])
-    submit3 = SubmitField("unfollow")
-    
 
     
     

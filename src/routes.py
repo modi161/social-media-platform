@@ -8,7 +8,7 @@ import time
 from sqlalchemy import desc
 from sqlalchemy.orm import aliased
 
-from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, FollowForm, UnfollowForm , CreateFamilyForm, EditContentForm
+from src.forms import Editform , Loginform , Signupform, ContentForm, DeleteContentForm, CreateFamilyForm, EditContentForm
 
 from src.models import User
 from src.models import Content, ContentPhotos, Family, FamilyFollowing, UserLikedContent
@@ -177,7 +177,13 @@ def unlike_post():
     db.session.commit()
     return jsonify({'status': 'unliked'})
 
-
+@app.route('/follow_family', methods=['POST'])
+def follow_family():
+    followingId = request.form['name']
+    newFollowing = FamilyFollowing(FollowingFamilyId = current_user.FamilyID, FollowedFamilyId =  followingId)
+    db.session.add(newFollowing)
+    db.session.commit()
+    return jsonify({'status': 'followed'})
 
 @app.route('/feedpage/<username>', methods=['GET', 'POST'])
 @login_required
@@ -189,7 +195,6 @@ def feedPage(username):
     family_id = user.FamilyID
     
     form  = ContentForm()
-    followingform = FollowForm()
     #When submit form, it will create object from Content including the submitted data.
     if form.submit.data:
         content = Content(description = form.description.data, visibility = form.visibility.data, userId = form.userID.data, Type = form.type.data)
@@ -240,17 +245,6 @@ def feedPage(username):
         #flash message
         #return same page, SHOULD I RETURN IT? or when click on add it will call this function and by default it will return to the page at the end
     
-
-    # Follow form
-    
-
-
-    if followingform.validate_on_submit() and followingform.submit1.data:
-        newFollowing = FamilyFollowing(FollowingFamilyId = family_id, FollowedFamilyId =  followingform.followedFamily.data)
-        db.session.add(newFollowing)
-        db.session.commit()
-        followingform.followedFamily.data = None #to clear the form after adding post
-
         
 
 
@@ -268,10 +262,6 @@ def feedPage(username):
     
     FamilyAlias = aliased(Family)
 
-
-
-
-    
 
     #
     like_count_subquery = db.session.query(
@@ -327,10 +317,16 @@ def feedPage(username):
     for liked in LikedContent:
         already_liked.append(liked.ContentId)
     
-    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = already_liked, form = form, followingForm = followingform)
+    return render_template('homefeed.html', User = user, Posts=posts, Families = families_filtered, Liked = already_liked, form = form)
 
 
-
+@app.route('/unfollow_family', methods=['POST'])
+def unfollow_family():
+    unfollowingId = request.form['name']
+    entry_to_delete = db.session.query(FamilyFollowing).filter(FamilyFollowing.FollowingFamilyId == current_user.FamilyID, FamilyFollowing.FollowedFamilyId == unfollowingId).first()
+    db.session.delete(entry_to_delete)
+    db.session.commit()
+    return jsonify({'status': 'unfollowed'})
 
 
 @app.route('/familypage/<int:family_id>', methods=['GET', 'POST'])
@@ -410,12 +406,6 @@ def family_page(family_id):
         
         
     
-    unfollow = UnfollowForm()
-    if unfollow.validate_on_submit() and unfollow.submit3.data:
-        entry_to_delete = db.session.query(FamilyFollowing).filter(FamilyFollowing.FollowingFamilyId == family_id, FamilyFollowing.FollowedFamilyId == unfollow.FamilyId.data).first()
-        db.session.delete(entry_to_delete)
-        db.session.commit()
-
     posts = db.session.query(User,  Content, ContentPhotos)\
     .join(Family, User.FamilyID == Family.id)\
     .join(Content, User.id == Content.userId)\
@@ -437,7 +427,7 @@ def family_page(family_id):
     
     followed_families = db.session.query(Family).filter(Family.id.in_(family_followed_ids)).all()   
 
-    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm, Unfollow = unfollow, editContentForm = editContentForm)
+    return render_template('family_page.html' ,current_user = current_user,form = form,followed_families = followed_families,user_family = user_family ,posts = posts , family_members = family_members, deleteForm = deleteForm, editContentForm = editContentForm)
 
     
     
