@@ -1,8 +1,6 @@
 import pytest
-import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -18,6 +16,7 @@ class TestTestlogin:
         options.add_argument('disable-infobars')
         options.add_argument('--disable-extensions')
         self.driver = webdriver.Chrome(options=options)
+        self.driver.set_window_size(1524, 822)
         self.vars = {}
   
     def teardown_method(self, method):
@@ -25,11 +24,8 @@ class TestTestlogin:
   
     def test_testlogin(self):
         self.driver.get("https://reunion.azurewebsites.net/")
-        self.driver.set_window_size(1524, 822)
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "email_login"))).click()
-        self.driver.find_element(By.ID, "email_login").send_keys("testuser123@gmail.com")
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "password_login"))).click()
-        self.driver.find_element(By.ID, "password_login").send_keys("123")
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "email_login"))).send_keys("testuser123@gmail.com")
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "password_login"))).send_keys("123")
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "log"))).click()
         elements = WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located((By.ID, "create-post")))
-        assert len(elements) > 0
+        assert len(elements) > 0, "Login failed, 'Create Post' not found."

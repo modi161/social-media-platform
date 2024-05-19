@@ -37,11 +37,13 @@ class TestDeletepost():
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".feed:nth-child(1) .delete-post path"))).click()
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "confirm-delete"))).click()
         
-        # Wait and refresh to ensure deletion
-        WebDriverWait(self.driver, 10).until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".feed:nth-child(1) small[text()='{}']".format(self.vars["posttimestamp"]))))
-        self.driver.refresh()
+        # Wait and refresh to ensure deletion using XPath to check for element invisibility
+        xpath_expression = f"//*[contains(@class, 'feed')][1]//small[contains(text(), '{self.vars["posttimestamp"]}')]"
 
-        # Check that the timestamp is no longer present
+        WebDriverWait(self.driver, 10).until(EC.invisibility_of_element_located((By.XPATH, xpath_expression)))
+
+        # Refresh and check that the timestamp is no longer present
+        self.driver.refresh()
         posts = self.driver.find_elements(By.CSS_SELECTOR, ".feed .info small")
         timestamps = [post.text for post in posts]
         assert self.vars["posttimestamp"] not in timestamps, "Timestamp still present on the page after deletion."
