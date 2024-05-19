@@ -37,8 +37,7 @@ class TestDeletepost():
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".feed:nth-child(1) .delete-post path"))).click()
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "confirm-delete"))).click()
         
-        # Wait and refresh to ensure deletion using XPath to check for element invisibility
-        xpath_expression = f"//*[contains(@class, 'feed')][1]//small[contains(text(), '{self.vars["posttimestamp"]}')]"
+        
 
         WebDriverWait(self.driver, 10).until(EC.invisibility_of_element_located((By.XPATH, xpath_expression)))
 
