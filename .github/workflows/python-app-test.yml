@@ -16,6 +16,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
@@ -27,13 +31,16 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
+        google-chrome --version
 
     - name: Install ChromeDriver
       run: |
         CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1)
+        echo "Detected Chrome Version: $CHROME_VERSION"
         CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        echo "Detected ChromeDriver Version: $CHROMEDRIVER_VERSION"
         wget -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-        unzip chromedriver_linux64.zip
+        unzip -o chromedriver_linux64.zip
         sudo mv chromedriver /usr/bin/chromedriver
         sudo chmod +x /usr/bin/chromedriver
 
