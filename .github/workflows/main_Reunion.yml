@@ -4,14 +4,11 @@
 name: Build and deploy container app to Azure Web App - Reunion
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'README.md'
-      - 'tests/**'
+  workflow_run:
+    workflows: ["Python application"]
+    types:
+      - completed
   workflow_dispatch:
-
 jobs:
   build:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
