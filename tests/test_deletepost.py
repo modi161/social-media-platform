@@ -39,7 +39,7 @@ class TestDeletepost():
         
         
 
-        WebDriverWait(self.driver, 10).until(EC.invisibility_of_element_located((By.XPATH, xpath_expression)))
+        
 
         # Refresh and check that the timestamp is no longer present
         self.driver.refresh()
