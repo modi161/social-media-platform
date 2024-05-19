@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,200;0,300;0,400;0,500;0,800;1,600;1,700&display=swap" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="icon" type="image/png" href="{{url_for("static",filename='images/icon.png')}}">
+<link rel="icon" type="image/png" href="{{url_for('static',filename='images/icon.png')}}">
 <script>
     $(document).ready(function(){
         $(document).on('click', '.ph--heart', function(event){
@@ -166,7 +166,7 @@
                         </div>
                     </a>
                     <a class="menu-item" href="{{ url_for('logout') }}">
-                        <span><span class="circum--logout"></span></span> <h3>Logout</h3>
+                        <span><span class="tabler--logout"></span></span> <h3>Logout</h3>
                     </a>
                 </div>
                 <label for="create-post" class="btn btn-primary">Create Post</label>
@@ -319,11 +319,12 @@
                     {% for family in Families %}
                     <div class="request">
                         <div class="info">
+                            <a href="{{ url_for('family_page', family_id=family.id) }}" >
                             <div class="profile-photo">
                                 <img src="{{family.profilephoto}}">
-                            </div>
+                            </div></a>
                             <div>
-                                <h5>{{ family.familyname }}</h5>
+                                <h5><a style="color: #241E38;" href="{{ url_for('family_page', family_id=family.id) }}" >{{family.familyname}}</a></h5>
                             </div>
                         </div>
                         <form class="follow" method="POST">

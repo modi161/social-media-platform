@@ -292,10 +292,11 @@
                     </div>
                     {% for followed_fam in followed_families %}
                     <div class="message">
+                        <a href="{{ url_for('family_page', family_id=followed_fam.id) }}" >
                         <div class="profile-photo">
                             <img src="{{followed_fam.profilephoto}}" alt="error">
                             <div class="active"></div>
-                        </div>
+                        </div></a>
                         <div class="message-body">
                             <h5><a href="{{ url_for('family_page', family_id=followed_fam.id) }}" >{{followed_fam.familyname}}</a></h5>
                             <form class="unfollow" method="POST">
